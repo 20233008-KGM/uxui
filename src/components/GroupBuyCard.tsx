@@ -13,12 +13,12 @@ export function GroupBuyCardLarge({ item }: { item: GroupBuy }) {
   return (
     <Link
       to={`/detail/${item.id}`}
-      className="block bg-surface rounded-2xl overflow-hidden shadow-sm border border-border/50"
+      className="block lr-card lr-card-interactive overflow-hidden"
     >
-      <ProductImage item={item} className="h-36" />
+      <ProductImage item={item} className="h-36 lr-image-well" />
       <div className="p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="font-bold text-text text-[15px] leading-snug">{item.title}</h3>
+          <h3 className="font-bold text-text text-[15px] leading-snug tracking-tight">{item.title}</h3>
           <span className={`shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full ${getStatusStyle(item.status)}`}>
             {item.statusLabel}
           </span>
@@ -61,9 +61,9 @@ export function GroupBuyCardCompact({ item }: { item: GroupBuy }) {
   return (
     <Link
       to={`/detail/${item.id}`}
-      className="flex gap-3 bg-surface rounded-2xl p-3 border border-border/50 shadow-sm"
+      className="flex gap-3 lr-card lr-card-interactive p-3"
     >
-      <ProductImage item={item} className="w-20 h-20 shrink-0 rounded-xl" imgClassName="w-full h-full object-cover rounded-xl" fallbackSize={32} />
+      <ProductImage item={item} className="w-20 h-20 shrink-0 rounded-xl lr-image-well" imgClassName="w-full h-full object-cover rounded-xl" fallbackSize={32} />
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-1">
           <h3 className="font-bold text-sm text-text truncate">{item.title}</h3>

@@ -1,17 +1,23 @@
 @import "tailwindcss";
 
+/* vision #11 — Lightroom 스타일: 중립 톤 · 선명 대비 · 은은한 깊이 */
 @theme {
-  --color-primary: #2e9d79;
-  --color-primary-dark: #238a68;
-  --color-primary-light: #e8f5f1;
-  --color-bg: #f7f7f7;
+  --color-primary: #2a9d8f;
+  --color-primary-dark: #1f7a6f;
+  --color-primary-light: #edf7f5;
+  --color-bg: #f0f0f0;
   --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-secondary: #888888;
-  --color-border: #eeeeee;
-  --color-orange: #f5a623;
-  --color-orange-light: #fff3e0;
+  --color-muted: #fafafa;
+  --color-text: #1d1d1d;
+  --color-text-secondary: #6e6e6e;
+  --color-border: #e0e0e0;
+  --color-orange: #e8912d;
+  --color-orange-light: #fff4e5;
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --shadow-lr-sm: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lr-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lr-lg: 0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lr-nav: 0 -4px 24px rgba(0, 0, 0, 0.06);
 }
 
 * {
@@ -21,8 +27,11 @@
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background: #e8e8e8;
+  background: #d8d8d8;
+  color: var(--color-text);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 #root {
@@ -30,6 +39,39 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+
+/* 카드 · 패널 — Lightroom 라이브러리 모듈 느낌 */
+.lr-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lr-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.lr-card-interactive:hover {
+  box-shadow: var(--shadow-lr-md);
+}
+
+.lr-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.lr-image-well {
+  background: linear-gradient(180deg, #ececec 0%, #e4e4e4 100%);
+}
+
+.lr-text-strong {
+  color: var(--color-text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.lr-text-muted {
+  color: var(--color-text-secondary);
 }
 
 @keyframes tier-shimmer {

@@ -11,9 +11,11 @@ import {
 } from 'lucide-react'
 import { screenGroups, PHONE_WIDTH, PHONE_HEIGHT } from '../data/screenRegistry'
 
-const SCALE_MIN = 0.28
+const SCALE_MIN = 0.22
 const SCALE_MAX = 0.85
 const SCALE_STEP = 0.05
+/** 첫 렌더·개요 버튼 — 셀 최대 채움 대신 전체가 보이도록 상한 */
+const OVERVIEW_SCALE_CAP = 0.36
 
 function ScreenFrame({
   name,
@@ -79,16 +81,39 @@ function getGridCols(width: number) {
   return 1
 }
 
-function calcFitScale(viewportWidth: number, sidebarWidth: number, columns: number) {
-  const padding = 48
-  const gap = 32
-  const available = viewportWidth - sidebarWidth - padding * 2
-  const cell = (available - gap * (columns - 1)) / columns
-  return Math.min(SCALE_MAX, Math.max(SCALE_MIN, +(cell / (PHONE_WIDTH + 24)).toFixed(2)))
+function calcOverviewScale(viewportWidth: number, viewportHeight: number, sidebarWidth: number, columns: number) {
+  const padX = 48
+  const padY = 56
+  const headerH = 52
+  const gapX = 24
+  const labelH = 52
+  const rowGap = 40
+  const groupBlock = 120
+
+  const availW = viewportWidth - sidebarWidth - padX * 2
+  const availH = viewportHeight - headerH - padY * 2
+
+  const scaleByWidth = (availW - gapX * (columns - 1)) / columns / (PHONE_WIDTH + 8)
+
+  let totalRows = 0
+  for (const group of screenGroups) {
+    totalRows += Math.ceil(group.screens.length / columns)
+  }
+  const fixedH = screenGroups.length * groupBlock + totalRows * (labelH + rowGap)
+  const scaleByHeight = (availH - fixedH) / (totalRows * PHONE_HEIGHT)
+
+  const heightScale = Number.isFinite(scaleByHeight) && scaleByHeight > 0 ? scaleByHeight : scaleByWidth
+  const fit = Math.min(scaleByWidth, heightScale)
+  return Math.min(OVERVIEW_SCALE_CAP, Math.max(SCALE_MIN, +fit.toFixed(2)))
 }
 
 export default function ScreenCanvasPage() {
-  const [scale, setScale] = useState(0.42)
+  const [scale, setScale] = useState(() => {
+    if (typeof window === 'undefined') return 0.32
+    const cols = getGridCols(window.innerWidth)
+    const sidebar = window.innerWidth >= 1024 ? 240 : 0
+    return calcOverviewScale(window.innerWidth, window.innerHeight, sidebar, cols)
+  })
   const [gridCols, setGridCols] = useState(() =>
     typeof window !== 'undefined' ? getGridCols(window.innerWidth) : 4,
   )
@@ -98,20 +123,24 @@ export default function ScreenCanvasPage() {
 
   const total = screenGroups.reduce((n, g) => n + g.screens.length, 0)
 
-  const fitScale = useCallback(() => {
+  const resetOverview = useCallback(() => {
     const w = window.innerWidth
+    const h = window.innerHeight
     const cols = getGridCols(w)
     setGridCols(cols)
-    const sidebar = w >= 1024 ? 240 : 0
-    setScale(calcFitScale(w, sidebar, cols))
+    setScale(calcOverviewScale(w, h, w >= 1024 ? 240 : 0, cols))
+    canvasRef.current?.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
   }, [])
 
   useEffect(() => {
-    fitScale()
-    const onResize = () => fitScale()
+    const onResize = () => setGridCols(getGridCols(window.innerWidth))
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [fitScale])
+  }, [])
+
+  useEffect(() => {
+    canvasRef.current?.scrollTo(0, 0)
+  }, [])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -124,11 +153,11 @@ export default function ScreenCanvasPage() {
         e.preventDefault()
         setScale((s) => Math.max(SCALE_MIN, +(s - SCALE_STEP).toFixed(2)))
       }
-      if (e.key === '0') fitScale()
+      if (e.key === '0') resetOverview()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [fitScale])
+  }, [resetOverview])
 
   const zoom = useCallback((delta: number) => {
     setScale((s) => Math.min(SCALE_MAX, Math.max(SCALE_MIN, +(s + delta).toFixed(2))))
@@ -192,12 +221,12 @@ export default function ScreenCanvasPage() {
         <div className="flex items-center gap-2 shrink-0">
           <div className="hidden md:flex items-center gap-1 bg-white/5 rounded-lg p-1">
             <button
-              onClick={fitScale}
+              onClick={resetOverview}
               className="px-2.5 h-8 flex items-center gap-1.5 text-xs rounded hover:bg-white/10"
-              title="화면 너비에 맞춤 (0)"
+              title="전체 개요 보기 (0)"
             >
               <LayoutGrid size={14} />
-              맞춤
+              개요
             </button>
             <button
               onClick={() => zoom(-SCALE_STEP)}
@@ -256,7 +285,7 @@ export default function ScreenCanvasPage() {
           </nav>
           <div className="px-4 py-3 border-t border-white/10 text-[10px] text-white/30 leading-relaxed">
             <p>+ / − 확대·축소</p>
-            <p>0 화면 맞춤</p>
+            <p>0 전체 개요</p>
             <p>Ctrl+휠 줌</p>
           </div>
         </aside>
@@ -275,7 +304,7 @@ export default function ScreenCanvasPage() {
             <div className="flex items-center gap-2 mb-8 text-white/30 text-xs">
               <Move size={14} />
               <span className="hidden sm:inline">드래그 이동 · 프레임 클릭 → 새 탭 ·</span>
-              데스크탑 그리드 배치
+              Ctrl+휠로 확대 · 개요에서 시작
             </div>
 
             {screenGroups.map((group, gi) => (

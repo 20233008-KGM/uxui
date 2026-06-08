@@ -30,7 +30,7 @@ export function ProductImage({
   const [failed, setFailed] = useState(false)
 
   return (
-    <div className={`relative overflow-hidden bg-gray-100 ${className}`}>
+    <div className={`relative overflow-hidden lr-image-well ${className}`}>
       {!failed ? (
         <img
           src={src}

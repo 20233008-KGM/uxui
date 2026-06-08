@@ -40,7 +40,7 @@ export function PageHeader({
   return (
     <>
       <StatusBar />
-      <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface/95 backdrop-blur-sm shadow-[var(--shadow-lr-sm)]">
         <div className="w-10">{left}</div>
         <h1 className="text-base font-bold text-text">{title}</h1>
         <div className="w-10 flex justify-end">{right}</div>
