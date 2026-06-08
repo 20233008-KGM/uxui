@@ -109,7 +109,7 @@ export default function DetailPage() {
 
           <div className="flex justify-between text-xs text-text-secondary mb-2">
             <span>현재 {item.current}명 참여중</span>
-            <span>목표 {item.max}명</span>
+            <span>최소 {item.min}명 · 목표 {item.max}명</span>
           </div>
           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
             <div className="h-full bg-primary rounded-full" style={{ width: `${progress}%` }} />
@@ -146,7 +146,7 @@ export default function DetailPage() {
               ['수령 방법', '팀장 집 방문 수령'],
               ['상세 주소', '모집 확정 후 공개'],
               ['도착 예정', '모집 완료 후 2~3일'],
-              ['최소 인원', '3명 (미달 시 자동 환불)'],
+              ['최소 인원', `${item.min}명 (미달 시 자동 환불)`],
               ['정산 시점', '수령 확인 후 팀장 정산'],
             ].map(([label, value]) => (
               <div key={label} className="flex justify-between py-3 text-sm gap-4">

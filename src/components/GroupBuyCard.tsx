@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { GroupBuy } from '../data/groupBuys'
-import { formatPrice, getProgress, getStatusStyle, getGroupBuyDistance } from '../data/groupBuys'
+import { formatPrice, getProgress, getStatusStyle, getGroupBuyDistance, isBelowMinimum, getMinMembersLabel } from '../data/groupBuys'
 import { SafePayBadge } from './SafePayBadge'
 import { DistanceBadge } from './LocationUI'
 import { ProductImage } from './ProductImage'
@@ -8,6 +8,7 @@ import { ProductImage } from './ProductImage'
 export function GroupBuyCardLarge({ item }: { item: GroupBuy }) {
   const progress = getProgress(item.current, item.max)
   const distance = getGroupBuyDistance(item)
+  const belowMin = isBelowMinimum(item)
 
   return (
     <Link
@@ -26,6 +27,13 @@ export function GroupBuyCardLarge({ item }: { item: GroupBuy }) {
           <span>📍 {item.pickupPoint.label}</span>
           <DistanceBadge meters={distance} compact />
           <span>👥 {item.current}/{item.max}명</span>
+          <span
+            className={`font-semibold px-1.5 py-0.5 rounded ${
+              belowMin ? 'bg-orange-light text-orange' : 'bg-primary-light text-primary'
+            }`}
+          >
+            {getMinMembersLabel(item.min)}부터 진행
+          </span>
         </div>
         <div className="flex items-end justify-between mb-2">
           <span className="text-lg font-bold text-text">{formatPrice(item.price)} / 1인</span>
@@ -48,6 +56,7 @@ export function GroupBuyCardLarge({ item }: { item: GroupBuy }) {
 export function GroupBuyCardCompact({ item }: { item: GroupBuy }) {
   const progress = getProgress(item.current, item.max)
   const distance = getGroupBuyDistance(item)
+  const belowMin = isBelowMinimum(item)
 
   return (
     <Link
@@ -66,6 +75,13 @@ export function GroupBuyCardCompact({ item }: { item: GroupBuy }) {
           <span>📍 {item.pickupPoint.label}</span>
           <DistanceBadge meters={distance} compact />
           <span>👥 {item.current}/{item.max}명</span>
+          <span
+            className={`font-semibold px-1.5 py-0.5 rounded text-[10px] ${
+              belowMin ? 'bg-orange-light text-orange' : 'bg-primary-light text-primary'
+            }`}
+          >
+            {getMinMembersLabel(item.min)}부터
+          </span>
         </div>
         <div className="flex items-end justify-between mb-1.5">
           <span className="text-sm font-bold text-text">{formatPrice(item.price)}/인</span>

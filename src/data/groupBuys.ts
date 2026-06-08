@@ -17,6 +17,8 @@ export interface GroupBuy {
   /** 팀장이 설정한 참여자 노출 범위 */
   visibilityRange: NeighborhoodRange
   current: number
+  /** 공구 실시에 필요한 최소 모집 인원 (vision #10) */
+  min: number
   max: number
   price: number
   originalPrice?: number
@@ -36,6 +38,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '1km',
     imageUrl: '/products/1.webp',
     current: 8,
+    min: 10,
     max: 20,
     price: 4200,
     originalPrice: 6000,
@@ -53,6 +56,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '1km',
     imageUrl: '/products/2.webp',
     current: 27,
+    min: 25,
     max: 30,
     price: 5800,
     daysLeft: '1일 남음',
@@ -69,6 +73,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '500m',
     imageUrl: '/products/3.webp',
     current: 5,
+    min: 10,
     max: 15,
     price: 3500,
     daysLeft: '5일 남음',
@@ -85,6 +90,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '1km',
     imageUrl: '/products/4.webp',
     current: 25,
+    min: 20,
     max: 25,
     price: 8900,
     daysLeft: '마감',
@@ -101,6 +107,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '2km',
     imageUrl: '/products/5.webp',
     current: 12,
+    min: 10,
     max: 40,
     price: 12000,
     daysLeft: '4일 남음',
@@ -117,6 +124,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '1km',
     imageUrl: '/products/1.webp',
     current: 22,
+    min: 15,
     max: 50,
     price: 4200,
     originalPrice: 6000,
@@ -134,6 +142,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '2km',
     imageUrl: '/products/2.webp',
     current: 9,
+    min: 10,
     max: 20,
     price: 5800,
     daysLeft: '6일 남음',
@@ -150,6 +159,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '500m',
     imageUrl: '/products/3.webp',
     current: 14,
+    min: 12,
     max: 15,
     price: 3500,
     daysLeft: '12시간 남음',
@@ -166,6 +176,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '1km',
     imageUrl: '/products/4.webp',
     current: 7,
+    min: 10,
     max: 18,
     price: 8900,
     originalPrice: 12000,
@@ -183,6 +194,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: 'dong',
     imageUrl: '/products/5.webp',
     current: 31,
+    min: 20,
     max: 45,
     price: 12000,
     daysLeft: '2일 남음',
@@ -199,6 +211,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '1km',
     imageUrl: '/products/1.webp',
     current: 16,
+    min: 10,
     max: 35,
     price: 4200,
     daysLeft: '5일 남음',
@@ -215,6 +228,7 @@ export const groupBuys: GroupBuy[] = [
     visibilityRange: '2km',
     imageUrl: '/products/2.webp',
     current: 4,
+    min: 10,
     max: 12,
     price: 5800,
     daysLeft: '8일 남음',
@@ -233,6 +247,15 @@ export function formatPrice(price: number) {
 
 export function getProgress(current: number, max: number) {
   return Math.round((current / max) * 100)
+}
+
+/** vision #10 — 최소 인원 미달 여부 */
+export function isBelowMinimum(item: Pick<GroupBuy, 'current' | 'min'>) {
+  return item.current < item.min
+}
+
+export function getMinMembersLabel(min: number) {
+  return `최소 ${min}명`
 }
 
 export function getStatusStyle(status: GroupBuy['status']) {
