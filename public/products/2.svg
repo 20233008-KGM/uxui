@@ -1,13 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="8Á8">
-  <defs>
-    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#eef6ff"/>
-      <stop offset="100%" stop-color="#dbeafe"/>
-    </linearGradient>
-  </defs>
-  <rect width="400" height="300" fill="url(#bg2)"/>
-  <path d="M175 60 L225 60 L240 90 L240 220 Q240 240 200 240 Q160 240 160 220 L160 90 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3"/>
-  <rect x="185" y="100" width="30" height="50" rx="4" fill="#93c5fd"/>
-  <ellipse cx="200" cy="75" rx="20" ry="8" fill="#1d4ed8"/>
-  <text x="200" y="210" text-anchor="middle" fill="#1d4ed8" font-family="sans-serif" font-size="22" font-weight="700">a´ 8Á8 3L</text>
-</svg>

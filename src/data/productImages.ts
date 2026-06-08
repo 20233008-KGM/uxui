@@ -7,9 +7,9 @@ const byId = Object.fromEntries(productCatalog.map((p) => [p.id, p.imageUrl]))
 export const productImageById: Record<string, string> = byId
 
 export function getProductImage(item: Pick<GroupBuy, 'id' | 'imageUrl'>) {
-  return item.imageUrl ?? productImageById[item.id] ?? '/products/1.svg'
+  return item.imageUrl ?? productImageById[item.id] ?? '/products/1.webp'
 }
 
 export function getProductImageById(id: string) {
-  return productImageById[id] ?? '/products/1.svg'
+  return productImageById[id] ?? '/products/1.webp'
 }

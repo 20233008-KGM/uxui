@@ -5,14 +5,14 @@ import { StatusBar } from '../components/Layout'
 import { LocationSummary } from '../components/LocationUI'
 import { useApp } from '../context/AppContext'
 import { getCatalogProduct } from '../data/productCatalog'
-import { formatPrice } from '../data/groupBuys'
+import { formatPrice, GROUP_BUY_MIN_MEMBERS, GROUP_BUY_MAX_MEMBERS } from '../data/groupBuys'
 
 export default function OpenGroupBuyStep2Page() {
   const navigate = useNavigate()
   const { leaderPickupLocation, leaderDetailAddress, selectedCatalogProductId } = useApp()
   const product = getCatalogProduct(selectedCatalogProductId)
-  const [minMembers, setMinMembers] = useState(3)
-  const [maxMembers, setMaxMembers] = useState(5)
+  const [minMembers, setMinMembers] = useState(GROUP_BUY_MIN_MEMBERS)
+  const [maxMembers, setMaxMembers] = useState(30)
 
   return (
     <div className="min-h-dvh bg-bg flex flex-col">
@@ -50,10 +50,24 @@ export default function OpenGroupBuyStep2Page() {
         <div>
           <label className="block text-sm font-semibold text-text mb-2">모집 인원</label>
           <div className="grid grid-cols-2 gap-4">
-            <NumberStepper label="최소 인원" value={minMembers} onChange={setMinMembers} min={2} />
-            <NumberStepper label="최대 인원" value={maxMembers} onChange={setMaxMembers} min={minMembers} />
+            <NumberStepper
+              label="최소 인원"
+              value={minMembers}
+              onChange={(v) => setMinMembers(Math.min(v, maxMembers))}
+              min={GROUP_BUY_MIN_MEMBERS}
+              max={GROUP_BUY_MAX_MEMBERS}
+            />
+            <NumberStepper
+              label="최대 인원"
+              value={maxMembers}
+              onChange={(v) => setMaxMembers(Math.max(v, minMembers))}
+              min={GROUP_BUY_MIN_MEMBERS}
+              max={GROUP_BUY_MAX_MEMBERS}
+            />
           </div>
-          <p className="text-xs text-text-secondary mt-2">최소 인원 미달 시 공구 무산 · 자동 환불</p>
+          <p className="text-xs text-text-secondary mt-2">
+            {GROUP_BUY_MIN_MEMBERS}~{GROUP_BUY_MAX_MEMBERS}명 · 최소 인원 미달 시 공구 무산 · 자동 환불
+          </p>
         </div>
 
         <div>
@@ -105,14 +119,14 @@ function StepIndicator({ current }: { current: number }) {
   )
 }
 
-function NumberStepper({ label, value, onChange, min }: { label: string; value: number; onChange: (v: number) => void; min: number }) {
+function NumberStepper({ label, value, onChange, min, max }: { label: string; value: number; onChange: (v: number) => void; min: number; max: number }) {
   return (
     <div>
       <p className="text-xs text-text-secondary mb-1">{label}</p>
       <div className="flex items-center bg-gray-100 rounded-xl overflow-hidden">
         <button onClick={() => onChange(Math.max(min, value - 1))} className="w-10 h-11 flex items-center justify-center"><Minus size={16} /></button>
         <span className="flex-1 text-center font-bold">{value}</span>
-        <button onClick={() => onChange(value + 1)} className="w-10 h-11 flex items-center justify-center"><Plus size={16} /></button>
+        <button onClick={() => onChange(Math.min(max, value + 1))} className="w-10 h-11 flex items-center justify-center"><Plus size={16} /></button>
       </div>
     </div>
   )

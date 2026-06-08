@@ -7,7 +7,7 @@ import { useApp } from '../context/AppContext'
 import { leaderLocationPresets, userHome } from '../data/locations'
 import { rangeLabels, type NeighborhoodRange } from '../data/notifications'
 import { productCatalog } from '../data/productCatalog'
-import { formatPrice } from '../data/groupBuys'
+import { formatPrice, GROUP_BUY_MIN_MEMBERS, GROUP_BUY_MAX_MEMBERS, clampGroupBuyMembers } from '../data/groupBuys'
 
 export default function OpenGroupBuyPage() {
   const navigate = useNavigate()
@@ -21,7 +21,7 @@ export default function OpenGroupBuyPage() {
     selectedCatalogProductId,
     setSelectedCatalogProductId,
   } = useApp()
-  const [memberCount, setMemberCount] = useState(4)
+  const [memberCount, setMemberCount] = useState(GROUP_BUY_MIN_MEMBERS)
   const [locationConfirmed, setLocationConfirmed] = useState(false)
 
   const selected = productCatalog.find((p) => p.id === selectedCatalogProductId) ?? productCatalog[0]
@@ -168,7 +168,7 @@ export default function OpenGroupBuyPage() {
             <div className="flex items-center bg-gray-100 rounded-xl overflow-hidden max-w-[200px]">
               <button
                 type="button"
-                onClick={() => setMemberCount(Math.max(selected.recommendedMin, memberCount - 1))}
+                onClick={() => setMemberCount(clampGroupBuyMembers(memberCount - 1))}
                 className="w-10 h-11 flex items-center justify-center text-text-secondary"
               >
                 <Minus size={16} />
@@ -176,14 +176,14 @@ export default function OpenGroupBuyPage() {
               <span className="flex-1 text-center font-bold text-text">{memberCount}명</span>
               <button
                 type="button"
-                onClick={() => setMemberCount(Math.min(selected.recommendedMax, memberCount + 1))}
+                onClick={() => setMemberCount(clampGroupBuyMembers(memberCount + 1))}
                 className="w-10 h-11 flex items-center justify-center text-text-secondary"
               >
                 <Plus size={16} />
               </button>
             </div>
             <p className="text-xs text-text-secondary mt-2">
-              권장 {selected.recommendedMin}~{selected.recommendedMax}명 · 최소 미달 시 자동 환불
+              {GROUP_BUY_MIN_MEMBERS}~{GROUP_BUY_MAX_MEMBERS}명 · 최소 미달 시 자동 환불
             </p>
           </div>
 
