@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { X, Camera, ChevronDown, Calendar, Minus, Plus, ShieldCheck, MapPin } from 'lucide-react'
+import { X, Calendar, Minus, Plus, ShieldCheck, MapPin, Package, CheckCircle2 } from 'lucide-react'
 import { StatusBar } from '../components/Layout'
 import { LocationPicker } from '../components/LocationUI'
 import { useApp } from '../context/AppContext'
 import { leaderLocationPresets, userHome } from '../data/locations'
 import { rangeLabels, type NeighborhoodRange } from '../data/notifications'
-
-import { openGroupBuySamplePhotos } from '../data/productImages'
+import { productCatalog } from '../data/productCatalog'
+import { formatPrice } from '../data/groupBuys'
 
 export default function OpenGroupBuyPage() {
   const navigate = useNavigate()
@@ -16,20 +16,22 @@ export default function OpenGroupBuyPage() {
     setLeaderPickupLocation,
     leaderDetailAddress,
     setLeaderDetailAddress,
-    leaderVisibilityRange,
     openVisibilityRange,
     setOpenVisibilityRange,
+    selectedCatalogProductId,
+    setSelectedCatalogProductId,
   } = useApp()
   const [memberCount, setMemberCount] = useState(4)
   const [locationConfirmed, setLocationConfirmed] = useState(false)
-  const [productPhoto, setProductPhoto] = useState(openGroupBuySamplePhotos[0].url)
+
+  const selected = productCatalog.find((p) => p.id === selectedCatalogProductId) ?? productCatalog[0]
 
   const handleUseCurrentLocation = () => {
     setLeaderPickupLocation({ ...userHome, label: '신림동 (현재 위치)' })
     setLocationConfirmed(true)
   }
 
-  const canProceed = locationConfirmed
+  const canProceed = locationConfirmed && !!selectedCatalogProductId
 
   return (
     <div className="min-h-dvh bg-bg flex flex-col">
@@ -60,15 +62,64 @@ export default function OpenGroupBuyPage() {
 
       <div className="flex-1 overflow-y-auto px-5 py-4 pb-28">
         <div className="bg-primary-light rounded-xl p-4 flex gap-3 mb-5">
-          <ShieldCheck size={20} className="text-primary shrink-0 mt-0.5" />
+          <Package size={20} className="text-primary shrink-0 mt-0.5" />
           <p className="text-sm text-primary-dark leading-relaxed">
-            참여자 결제금은 <strong>공구페이</strong>로 안전 보관됩니다.
-            수령 위치를 입력하면 멀리 사는 참여를 줄일 수 있어요.
+            <strong>플랫폼 제공 품목</strong>만 선택할 수 있어요. 가격은 대량 공구 기준으로
+            이미 정해져 있습니다.
           </p>
         </div>
 
         <div className="space-y-5">
-          {/* vision.md: 공구 열기 1단계에서 위치 입력 */}
+          {/* vision #7: 카탈로그 품목 선택 (가격 입력 없음) */}
+          <div className="bg-surface rounded-2xl border border-border p-4">
+            <label className="block text-sm font-semibold text-text mb-3 flex items-center gap-1.5">
+              <Package size={16} className="text-primary" />
+              공구 품목 선택
+              <span className="text-[10px] bg-primary text-white px-1.5 py-0.5 rounded font-bold">필수</span>
+            </label>
+            <div className="space-y-2">
+              {productCatalog.map((product) => {
+                const active = product.id === selectedCatalogProductId
+                return (
+                  <button
+                    key={product.id}
+                    type="button"
+                    onClick={() => setSelectedCatalogProductId(product.id)}
+                    className={`w-full flex items-center gap-3 p-3 rounded-xl border text-left transition-colors ${
+                      active
+                        ? 'border-primary bg-primary-light ring-1 ring-primary/20'
+                        : 'border-border bg-gray-50 hover:bg-gray-100'
+                    }`}
+                  >
+                    <img
+                      src={product.imageUrl}
+                      alt={product.title}
+                      className="w-16 h-16 rounded-lg object-cover bg-white shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-text truncate">{product.title}</p>
+                      <p className="text-xs text-text-secondary">{product.category} · {product.bulkNote}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm font-bold text-primary">
+                          {formatPrice(product.pricePerPerson)}/인
+                        </span>
+                        {product.originalPrice && (
+                          <span className="text-xs text-text-secondary line-through">
+                            {formatPrice(product.originalPrice)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {active && <CheckCircle2 size={20} className="text-primary shrink-0" />}
+                  </button>
+                )
+              })}
+            </div>
+            <p className="text-[11px] text-text-secondary mt-3 bg-gray-50 rounded-lg p-2.5">
+              선택: <strong>{selected.title}</strong> · {formatPrice(selected.pricePerPerson)} (가격 수정 불가)
+            </p>
+          </div>
+
           <div className="bg-surface rounded-2xl border border-primary/20 p-4">
             <label className="block text-sm font-semibold text-text mb-3 flex items-center gap-1.5">
               <MapPin size={16} className="text-primary" />
@@ -90,9 +141,7 @@ export default function OpenGroupBuyPage() {
           </div>
 
           <div className="bg-surface rounded-2xl border border-border p-4">
-            <label className="block text-sm font-semibold text-text mb-2">
-              참여자 노출 범위 (팀장)
-            </label>
+            <label className="block text-sm font-semibold text-text mb-2">참여자 노출 범위 (팀장)</label>
             <p className="text-xs text-text-secondary mb-3 leading-relaxed">
               수령 위치 기준 이 거리 안의 이웃에게만 공구가 보이고 참여할 수 있어요.
             </p>
@@ -112,98 +161,58 @@ export default function OpenGroupBuyPage() {
                 </button>
               ))}
             </div>
-            <p className="text-[11px] text-text-secondary mt-2">
-              마이페이지 기본값: {rangeLabels[leaderVisibilityRange]}
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-text mb-2">모집 인원</label>
+            <div className="flex items-center bg-gray-100 rounded-xl overflow-hidden max-w-[200px]">
+              <button
+                type="button"
+                onClick={() => setMemberCount(Math.max(selected.recommendedMin, memberCount - 1))}
+                className="w-10 h-11 flex items-center justify-center text-text-secondary"
+              >
+                <Minus size={16} />
+              </button>
+              <span className="flex-1 text-center font-bold text-text">{memberCount}명</span>
+              <button
+                type="button"
+                onClick={() => setMemberCount(Math.min(selected.recommendedMax, memberCount + 1))}
+                className="w-10 h-11 flex items-center justify-center text-text-secondary"
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+            <p className="text-xs text-text-secondary mt-2">
+              권장 {selected.recommendedMin}~{selected.recommendedMax}명 · 최소 미달 시 자동 환불
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-text mb-2">상품 사진</label>
-            <div className="rounded-xl overflow-hidden border border-border mb-2 h-40">
-              <img src={productPhoto} alt="상품 미리보기" className="w-full h-full object-cover" />
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {openGroupBuySamplePhotos.map((photo) => (
-                <button
-                  key={photo.id}
-                  type="button"
-                  onClick={() => setProductPhoto(photo.url)}
-                  className={`aspect-square rounded-lg overflow-hidden border-2 ${
-                    productPhoto === photo.url ? 'border-primary ring-2 ring-primary/20' : 'border-border'
-                  }`}
-                >
-                  <img src={photo.url} alt={photo.label} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
+            <label className="block text-sm font-semibold text-text mb-2">모집 마감일</label>
             <button
               type="button"
-              className="mt-2 w-full h-10 border border-dashed border-gray-300 rounded-xl flex items-center justify-center gap-2 text-xs text-text-secondary"
+              className="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm text-text-secondary flex items-center justify-between"
             >
-              <Camera size={16} />
-              갤러리에서 추가 (데모)
-            </button>
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-text mb-2">상품명</label>
-            <input
-              type="text"
-              placeholder="ex. 3겹 화장지 30롤 대용량"
-              className="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-text-secondary"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-text mb-2">카테고리</label>
-            <button className="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm text-text-secondary flex items-center justify-between">
-              카테고리 선택
-              <ChevronDown size={18} />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-text mb-2">총 상품 금액</label>
-              <input
-                type="text"
-                placeholder="0 원"
-                className="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-text-secondary"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-text mb-2">모집 인원</label>
-              <div className="flex items-center bg-gray-100 rounded-xl overflow-hidden">
-                <button
-                  onClick={() => setMemberCount(Math.max(2, memberCount - 1))}
-                  className="w-10 h-11 flex items-center justify-center text-text-secondary"
-                >
-                  <Minus size={16} />
-                </button>
-                <span className="flex-1 text-center font-bold text-text">{memberCount}</span>
-                <button
-                  onClick={() => setMemberCount(memberCount + 1)}
-                  className="w-10 h-11 flex items-center justify-center text-text-secondary"
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-text mb-2">모집 마감일</label>
-            <button className="w-full bg-gray-100 rounded-xl px-4 py-3 text-sm text-text-secondary flex items-center justify-between">
               날짜 선택
               <Calendar size={18} />
             </button>
+          </div>
+
+          <div className="bg-gray-50 rounded-xl p-4 flex gap-3">
+            <ShieldCheck size={18} className="text-primary shrink-0" />
+            <p className="text-xs text-text-secondary leading-relaxed">
+              참여자 결제금은 <strong>공구페이</strong>로 보관됩니다. 팀장은 품목·가격을
+              임의로 정할 수 없어 허위 등록을 줄일 수 있어요.
+            </p>
           </div>
         </div>
       </div>
 
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-surface border-t border-border px-5 py-4">
         {!canProceed && (
-          <p className="text-[11px] text-orange text-center mb-2">수령 위치를 선택해주세요</p>
+          <p className="text-[11px] text-orange text-center mb-2">
+            {!selectedCatalogProductId ? '품목을 선택해주세요' : '수령 위치를 선택해주세요'}
+          </p>
         )}
         {canProceed ? (
           <Link

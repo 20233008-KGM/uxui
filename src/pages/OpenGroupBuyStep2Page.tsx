@@ -4,10 +4,13 @@ import { X, Calendar, Minus, Plus } from 'lucide-react'
 import { StatusBar } from '../components/Layout'
 import { LocationSummary } from '../components/LocationUI'
 import { useApp } from '../context/AppContext'
+import { getCatalogProduct } from '../data/productCatalog'
+import { formatPrice } from '../data/groupBuys'
 
 export default function OpenGroupBuyStep2Page() {
   const navigate = useNavigate()
-  const { leaderPickupLocation, leaderDetailAddress } = useApp()
+  const { leaderPickupLocation, leaderDetailAddress, selectedCatalogProductId } = useApp()
+  const product = getCatalogProduct(selectedCatalogProductId)
   const [minMembers, setMinMembers] = useState(3)
   const [maxMembers, setMaxMembers] = useState(5)
 
@@ -24,6 +27,21 @@ export default function OpenGroupBuyStep2Page() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-4 pb-28 space-y-5">
+        <div className="bg-surface rounded-xl border border-border p-4 flex gap-3">
+          <img
+            src={product.imageUrl}
+            alt={product.title}
+            className="w-16 h-16 rounded-lg object-cover shrink-0"
+          />
+          <div>
+            <p className="text-xs text-text-secondary">선택한 품목</p>
+            <p className="font-bold text-sm text-text">{product.title}</p>
+            <p className="text-sm font-semibold text-primary mt-0.5">
+              {formatPrice(product.pricePerPerson)}/인 · 가격 고정
+            </p>
+          </div>
+        </div>
+
         <LocationSummary location={leaderPickupLocation} detail={leaderDetailAddress || undefined} />
         <Link to="/open" className="block text-center text-xs text-primary font-semibold -mt-2">
           위치 수정하기 →

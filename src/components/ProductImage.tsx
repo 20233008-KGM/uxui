@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Package, Droplets, FlaskConical } from 'lucide-react'
 import type { GroupBuy } from '../data/groupBuys'
 import { getProductImage } from '../data/productImages'
@@ -26,22 +27,24 @@ export function ProductImage({
   fallbackSize?: number
 }) {
   const src = getProductImage(item)
+  const [failed, setFailed] = useState(false)
 
   return (
     <div className={`relative overflow-hidden bg-gray-100 ${className}`}>
-      <img
-        src={src}
-        alt={item.title}
-        className={imgClassName}
-        loading="lazy"
-        onError={(e) => {
-          e.currentTarget.style.display = 'none'
-          e.currentTarget.nextElementSibling?.classList.remove('hidden')
-        }}
-      />
-      <div className="hidden absolute inset-0 flex items-center justify-center">
-        <ProductIcon icon={item.icon} size={fallbackSize} />
-      </div>
+      {!failed ? (
+        <img
+          src={src}
+          alt={item.title}
+          className={imgClassName}
+          loading="lazy"
+          decoding="async"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <ProductIcon icon={item.icon} size={fallbackSize} />
+        </div>
+      )}
     </div>
   )
 }

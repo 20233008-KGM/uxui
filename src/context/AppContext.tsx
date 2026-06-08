@@ -41,6 +41,9 @@ interface AppContextValue {
   setLeaderPickupLocation: (loc: GeoPoint) => void
   leaderDetailAddress: string
   setLeaderDetailAddress: (v: string) => void
+  /** 공구 열기 선택 품목 (플랫폼 카탈로그) */
+  selectedCatalogProductId: string
+  setSelectedCatalogProductId: (id: string) => void
   inviteRewardClaimed: boolean
   claimInviteReward: (code: string) => void
   /** 팀장 마일리지 (공구 열기 등으로 적립) */
@@ -98,6 +101,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [coldStartMode, setColdStartMode] = useState(false)
   const [leaderPickupLocation, setLeaderPickupLocation] = useState<GeoPoint>(leaderLocationPresets[0])
   const [leaderDetailAddress, setLeaderDetailAddress] = useState('')
+  const [selectedCatalogProductId, setSelectedCatalogProductId] = useState('1')
   const [inviteRewardClaimed, setInviteRewardClaimed] = useState(
     () => sessionStorage.getItem('gonggu_invite_claimed') !== null,
   )
@@ -197,6 +201,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setLeaderPickupLocation,
         leaderDetailAddress,
         setLeaderDetailAddress,
+        selectedCatalogProductId,
+        setSelectedCatalogProductId,
         inviteRewardClaimed,
         claimInviteReward,
         leaderMileage,
