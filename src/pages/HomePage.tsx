@@ -4,6 +4,7 @@ import { ShieldCheck } from 'lucide-react'
 import { StatusBar, LocationHeader } from '../components/Layout'
 import { GroupBuyCardLarge } from '../components/GroupBuyCard'
 import ColdStartBanner from '../components/ColdStartBanner'
+import InviteHomeBanner from '../components/InviteHomeBanner'
 import { groupBuys, filterVisibleGroupBuys } from '../data/groupBuys'
 import { useApp } from '../context/AppContext'
 
@@ -36,6 +37,8 @@ export default function HomePage() {
           </p>
         </div>
       </div>
+
+      <InviteHomeBanner />
 
       {coldStartMode && <ColdStartBanner />}
 

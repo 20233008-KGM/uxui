@@ -4,6 +4,7 @@ import { ArrowLeft, ShieldCheck, CreditCard, CheckCircle2, Ban } from 'lucide-re
 import { PageHeader } from '../components/Layout'
 import { SafePayBanner } from '../components/SafePayBadge'
 import { groupBuys, formatPrice, getGroupBuyDistance } from '../data/groupBuys'
+import { ProductImage } from '../components/ProductImage'
 import { useApp } from '../context/AppContext'
 import { defaultInviteReward } from '../data/inviteEvent'
 import { canJoinGroupBuy } from '../data/locations'
@@ -50,10 +51,18 @@ export default function PaymentPage() {
       <div className="flex-1 overflow-y-auto pb-28 px-5 py-4 space-y-4">
         <SafePayBanner />
 
-        <div className="bg-surface rounded-2xl border border-border p-4">
-          <p className="text-xs text-text-secondary mb-3">주문 상품</p>
-          <p className="font-bold text-text mb-1">{item.title}</p>
-          <p className="text-sm text-text-secondary">📍 {item.location} · 팀장 김신림</p>
+        <div className="bg-surface rounded-2xl border border-border p-4 flex gap-3">
+          <ProductImage
+            item={item}
+            className="w-16 h-16 shrink-0 rounded-xl"
+            imgClassName="w-full h-full object-cover rounded-xl"
+            fallbackSize={28}
+          />
+          <div>
+            <p className="text-xs text-text-secondary mb-1">주문 상품</p>
+            <p className="font-bold text-text mb-1">{item.title}</p>
+            <p className="text-sm text-text-secondary">📍 {item.location} · 팀장 김신림</p>
+          </div>
         </div>
 
         <div className="bg-surface rounded-2xl border border-border overflow-hidden">

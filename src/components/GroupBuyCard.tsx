@@ -1,21 +1,9 @@
-import { Package, Droplets, FlaskConical } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { GroupBuy } from '../data/groupBuys'
 import { formatPrice, getProgress, getStatusStyle, getGroupBuyDistance } from '../data/groupBuys'
 import { SafePayBadge } from './SafePayBadge'
 import { DistanceBadge } from './LocationUI'
-
-function ProductIcon({ icon, size = 40 }: { icon: GroupBuy['icon']; size?: number }) {
-  const props = { size, className: 'text-gray-400', strokeWidth: 1.5 }
-  switch (icon) {
-    case 'droplet':
-      return <Droplets {...props} />
-    case 'bottle':
-      return <FlaskConical {...props} />
-    default:
-      return <Package {...props} />
-  }
-}
+import { ProductImage } from './ProductImage'
 
 export function GroupBuyCardLarge({ item }: { item: GroupBuy }) {
   const progress = getProgress(item.current, item.max)
@@ -26,9 +14,7 @@ export function GroupBuyCardLarge({ item }: { item: GroupBuy }) {
       to={`/detail/${item.id}`}
       className="block bg-surface rounded-2xl overflow-hidden shadow-sm border border-border/50"
     >
-      <div className="h-36 bg-gray-100 flex items-center justify-center">
-        <ProductIcon icon={item.icon} size={48} />
-      </div>
+      <ProductImage item={item} className="h-36" />
       <div className="p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3 className="font-bold text-text text-[15px] leading-snug">{item.title}</h3>
@@ -68,9 +54,7 @@ export function GroupBuyCardCompact({ item }: { item: GroupBuy }) {
       to={`/detail/${item.id}`}
       className="flex gap-3 bg-surface rounded-2xl p-3 border border-border/50 shadow-sm"
     >
-      <div className="w-20 h-20 shrink-0 bg-gray-100 rounded-xl flex items-center justify-center">
-        <ProductIcon icon={item.icon} size={32} />
-      </div>
+      <ProductImage item={item} className="w-20 h-20 shrink-0 rounded-xl" imgClassName="w-full h-full object-cover rounded-xl" fallbackSize={32} />
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-1">
           <h3 className="font-bold text-sm text-text truncate">{item.title}</h3>

@@ -6,7 +6,6 @@ import {
   Clock,
   ChevronRight,
   MessageCircle,
-  Package,
   ShieldCheck,
   Ban,
 } from 'lucide-react'
@@ -14,6 +13,8 @@ import { PageHeader } from '../components/Layout'
 import { SafePayBadge, SafePayBanner } from '../components/SafePayBadge'
 import { RepurchaseBanner, PolicySection } from '../components/FlowHelpers'
 import { DistanceBadge, DistanceWarning } from '../components/LocationUI'
+import { ProductImage } from '../components/ProductImage'
+import { MapPreview } from '../components/MapPreview'
 import {
   groupBuys,
   formatPrice,
@@ -56,8 +57,8 @@ export default function DetailPage() {
       />
 
       <div className="flex-1 overflow-y-auto pb-24">
-        <div className="h-52 bg-[#f2f2ee] flex items-center justify-center relative">
-          <Package size={64} className="text-gray-400" strokeWidth={1.5} />
+        <div className="relative h-52">
+          <ProductImage item={item} className="h-52" />
           <div className="absolute top-3 left-3">
             <SafePayBadge size="md" />
           </div>
@@ -158,6 +159,14 @@ export default function DetailPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="mt-2 bg-surface px-5 py-4">
+          <p className="text-xs text-text-secondary mb-3">수령 위치 지도</p>
+          <MapPreview point={item.pickupPoint} height={160} />
+          <p className="text-[11px] text-text-secondary mt-2">
+            상세 주소는 모집 확정 후 공개 · 거리 {distance < 1000 ? `${distance}m` : `${(distance / 1000).toFixed(1)}km`}
+          </p>
         </div>
 
         <PolicySection />

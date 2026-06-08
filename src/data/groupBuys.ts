@@ -6,6 +6,8 @@ export interface GroupBuy {
   id: string
   title: string
   icon: 'box' | 'droplet' | 'bottle'
+  /** 상품 대표 이미지 URL */
+  imageUrl?: string
   status: 'recruiting' | 'closing' | 'complete'
   statusLabel: string
   location: string

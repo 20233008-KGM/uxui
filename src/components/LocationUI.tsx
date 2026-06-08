@@ -3,6 +3,7 @@ import type { GeoPoint } from '../data/locations'
 import { formatDistance, getDistanceMeters, userHome } from '../data/locations'
 import type { NeighborhoodRange } from '../data/notifications'
 import { isWithinRange } from '../data/locations'
+import { MapPreview } from './MapPreview'
 
 export function DistanceBadge({
   meters,
@@ -50,12 +51,7 @@ export function LocationPicker({
         </p>
       )}
 
-      <div className="h-36 bg-gray-100 rounded-xl border-2 border-primary/30 flex flex-col items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30 bg-[linear-gradient(#ccc_1px,transparent_1px),linear-gradient(90deg,#ccc_1px,transparent_1px)] bg-[length:20px_20px]" />
-        <MapPin size={28} className="text-primary relative z-10 mb-1" />
-        <p className="text-sm font-bold text-text relative z-10">{selected.label}</p>
-        <p className="text-xs text-text-secondary relative z-10">{selected.dong} · 미리보기</p>
-      </div>
+      <MapPreview point={selected} height={160} className="mb-1" />
 
       {onUseCurrentLocation && (
         <button
@@ -119,17 +115,20 @@ export function LocationPicker({
 
 export function LocationSummary({ location, detail }: { location: GeoPoint; detail?: string }) {
   return (
-    <div className="bg-surface rounded-xl border border-border p-4 flex items-start gap-3">
-      <div className="w-10 h-10 rounded-full bg-primary-light flex items-center justify-center shrink-0">
-        <MapPin size={18} className="text-primary" />
-      </div>
-      <div>
-        <p className="text-xs text-text-secondary">등록된 수령 위치</p>
-        <p className="font-bold text-sm text-text">{location.label}</p>
-        {detail && <p className="text-xs text-text-secondary mt-0.5">{detail} (확정 후 공개)</p>}
-        <p className="text-[11px] text-primary mt-1">
-          참여자 기준 약 {formatDistance(getDistanceMeters(userHome, location))}
-        </p>
+    <div className="space-y-3">
+      <MapPreview point={location} height={140} />
+      <div className="bg-surface rounded-xl border border-border p-4 flex items-start gap-3">
+        <div className="w-10 h-10 rounded-full bg-primary-light flex items-center justify-center shrink-0">
+          <MapPin size={18} className="text-primary" />
+        </div>
+        <div>
+          <p className="text-xs text-text-secondary">등록된 수령 위치</p>
+          <p className="font-bold text-sm text-text">{location.label}</p>
+          {detail && <p className="text-xs text-text-secondary mt-0.5">{detail} (확정 후 공개)</p>}
+          <p className="text-[11px] text-primary mt-1">
+            참여자 기준 약 {formatDistance(getDistanceMeters(userHome, location))}
+          </p>
+        </div>
       </div>
     </div>
   )

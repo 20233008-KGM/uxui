@@ -7,6 +7,8 @@ import { useApp } from '../context/AppContext'
 import { leaderLocationPresets, userHome } from '../data/locations'
 import { rangeLabels, type NeighborhoodRange } from '../data/notifications'
 
+import { openGroupBuySamplePhotos } from '../data/productImages'
+
 export default function OpenGroupBuyPage() {
   const navigate = useNavigate()
   const {
@@ -20,6 +22,7 @@ export default function OpenGroupBuyPage() {
   } = useApp()
   const [memberCount, setMemberCount] = useState(4)
   const [locationConfirmed, setLocationConfirmed] = useState(false)
+  const [productPhoto, setProductPhoto] = useState(openGroupBuySamplePhotos[0].url)
 
   const handleUseCurrentLocation = () => {
     setLeaderPickupLocation({ ...userHome, label: '신림동 (현재 위치)' })
@@ -116,9 +119,29 @@ export default function OpenGroupBuyPage() {
 
           <div>
             <label className="block text-sm font-semibold text-text mb-2">상품 사진</label>
-            <button className="w-full h-32 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 text-text-secondary">
-              <Camera size={28} />
-              <span className="text-sm">사진 추가</span>
+            <div className="rounded-xl overflow-hidden border border-border mb-2 h-40">
+              <img src={productPhoto} alt="상품 미리보기" className="w-full h-full object-cover" />
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {openGroupBuySamplePhotos.map((photo) => (
+                <button
+                  key={photo.id}
+                  type="button"
+                  onClick={() => setProductPhoto(photo.url)}
+                  className={`aspect-square rounded-lg overflow-hidden border-2 ${
+                    productPhoto === photo.url ? 'border-primary ring-2 ring-primary/20' : 'border-border'
+                  }`}
+                >
+                  <img src={photo.url} alt={photo.label} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="mt-2 w-full h-10 border border-dashed border-gray-300 rounded-xl flex items-center justify-center gap-2 text-xs text-text-secondary"
+            >
+              <Camera size={16} />
+              갤러리에서 추가 (데모)
             </button>
           </div>
 
