@@ -1,10 +1,22 @@
 import { useNavigate, Link, useParams } from 'react-router-dom'
-import { CheckCircle2, XCircle, MessageCircle, Home, RotateCcw, Users, Gift } from 'lucide-react'
+import { CheckCircle2, XCircle, MessageCircle, Home, RotateCcw, Users, Gift, Sparkles } from 'lucide-react'
 import { formatPrice } from '../data/groupBuys'
+import { useApp } from '../context/AppContext'
+import { MILEAGE_OPEN_GROUP_BUY } from '../data/leaderTier'
+import { useEffect, useRef } from 'react'
 
 export default function RecruitmentResultPage() {
   const { result } = useParams<{ result: string }>()
   const navigate = useNavigate()
+  const { addLeaderMileage } = useApp()
+  const mileageAdded = useRef(false)
+
+  useEffect(() => {
+    if (result === 'leader-success' && !mileageAdded.current) {
+      mileageAdded.current = true
+      addLeaderMileage(MILEAGE_OPEN_GROUP_BUY)
+    }
+  }, [result, addLeaderMileage])
   const isLeaderSuccess = result === 'leader-success'
   const isSuccess = result === 'success' || isLeaderSuccess
   const isWaiting = result === 'waiting'
@@ -99,13 +111,26 @@ export default function RecruitmentResultPage() {
 
       <div className="w-full flex flex-col gap-3">
         {isLeaderSuccess && (
-          <Link
-            to="/leader/invite"
-            className="w-full h-12 bg-gradient-to-r from-orange to-orange/80 text-white font-bold rounded-xl flex items-center justify-center gap-2"
-          >
-            <Gift size={18} />
-            지인 초대하고 혜택 받기
-          </Link>
+          <>
+            <div className="w-full bg-primary-light rounded-xl p-3 mb-1 flex items-center gap-2 text-sm text-primary-dark">
+              <Sparkles size={16} className="text-primary shrink-0" />
+              팀장 마일리지 +{MILEAGE_OPEN_GROUP_BUY} 적립!
+            </div>
+            <Link
+              to="/leader/invite"
+              className="w-full h-12 bg-gradient-to-r from-orange to-orange/80 text-white font-bold rounded-xl flex items-center justify-center gap-2"
+            >
+              <Gift size={18} />
+              지인 초대하고 혜택 받기
+            </Link>
+            <Link
+              to="/mypage/tier"
+              className="w-full h-11 border border-primary/30 bg-primary-light text-primary font-semibold rounded-xl flex items-center justify-center gap-2 text-sm"
+            >
+              <Sparkles size={16} />
+              내 등급 확인
+            </Link>
+          </>
         )}
         <Link to="/chat" className="w-full h-12 bg-primary text-white font-bold rounded-xl flex items-center justify-center gap-2">
           <MessageCircle size={18} />

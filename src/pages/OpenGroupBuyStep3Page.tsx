@@ -1,13 +1,20 @@
 import { Link } from 'react-router-dom'
-import { X, ShieldCheck, CheckCircle2, MapPin, Eye, TrendingUp } from 'lucide-react'
+import { X, ShieldCheck, CheckCircle2, MapPin, Eye, TrendingUp, Crown } from 'lucide-react'
 import { StatusBar } from '../components/Layout'
 import { StepIndicator } from './OpenGroupBuyStep2Page'
 import { formatPrice } from '../data/groupBuys'
 import { useApp } from '../context/AppContext'
 import { rangeLabels } from '../data/notifications'
+import {
+  getLeaderCommission,
+  getTierFromMileage,
+  formatCommissionShare,
+  MILEAGE_OPEN_GROUP_BUY,
+  BASE_COMMISSION,
+} from '../data/leaderTier'
+import { TierBadge } from '../components/TierUI'
 
 const leaderShare = 4200
-const commission = 800
 
 const leaderTiers = [
   { members: 3, bonus: 0, label: '기본' },
@@ -16,7 +23,9 @@ const leaderTiers = [
 ]
 
 export default function OpenGroupBuyStep3Page() {
-  const { leaderPickupLocation, leaderDetailAddress, openVisibilityRange } = useApp()
+  const { leaderPickupLocation, leaderDetailAddress, openVisibilityRange, leaderMileage } = useApp()
+  const tier = getTierFromMileage(leaderMileage)
+  const commission = getLeaderCommission(leaderMileage)
 
   return (
     <div className="min-h-dvh bg-bg flex flex-col">
@@ -33,6 +42,24 @@ export default function OpenGroupBuyStep3Page() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 py-4 pb-28 space-y-4">
+        <div className="bg-surface rounded-xl border border-border p-4 flex items-center gap-3">
+          <Crown size={20} style={{ color: tier.accent }} className="shrink-0" />
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <TierBadge tierId={tier.id} size="sm" />
+              <span className="text-xs text-text-secondary">
+                {formatCommissionShare(tier.commissionShare)} 수수료
+              </span>
+            </div>
+            <p className="text-xs text-text-secondary">
+              개설 완료 시 +{MILEAGE_OPEN_GROUP_BUY} 마일리지 ·{' '}
+              <Link to="/mypage/tier" className="text-primary font-semibold">
+                등급 보기
+              </Link>
+            </p>
+          </div>
+        </div>
+
         <div className="bg-surface rounded-xl border border-border p-4 flex items-center gap-3">
           <MapPin size={20} className="text-primary shrink-0" />
           <div>
@@ -58,8 +85,10 @@ export default function OpenGroupBuyStep3Page() {
             <p className="text-sm font-bold text-text">팀장 수수료 · 보너스</p>
           </div>
           <p className="text-xs text-primary-dark leading-relaxed mb-3">
-            참여자 수령 확인 후 인당 {formatPrice(commission)} 수수료가 정산됩니다.
-            5명 모집 시 총 {formatPrice(commission * 5)} 예상 수익.
+            {tier.label} 등급 · 참여자 수령 확인 후 인당{' '}
+            <strong>{formatPrice(commission)}</strong> ({formatCommissionShare(tier.commissionShare)} of{' '}
+            {formatPrice(BASE_COMMISSION)}).
+            5명 모집 시 총 {formatPrice(commission * 5)} 예상.
           </p>
           <div className="space-y-2">
             {leaderTiers.map((t) => (
@@ -102,7 +131,7 @@ export default function OpenGroupBuyStep3Page() {
             '수령 위치·노출 범위가 참여자에게 표시됩니다',
             '팀장도 참여자와 동일하게 에스크로 결제',
             '모집 성공 시 채팅방 자동 생성',
-            '참여자 수령 확인 후 수수료 정산',
+            '참여자 수령 확인 후 등급별 수수료 정산',
           ].map((t) => (
             <div key={t} className="flex items-start gap-2 text-xs text-text-secondary">
               <CheckCircle2 size={14} className="text-primary shrink-0 mt-0.5" />

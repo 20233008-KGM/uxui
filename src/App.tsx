@@ -34,6 +34,7 @@ import LeaderUnavailablePage from './pages/LeaderUnavailablePage'
 import MemberCancelAfterRecruitmentPage from './pages/MemberCancelAfterRecruitmentPage'
 import InviteFriendsPage from './pages/InviteFriendsPage'
 import InviteEventPage from './pages/InviteEventPage'
+import LeaderTierPage from './pages/LeaderTierPage'
 import PickupOverduePage from './pages/PickupOverduePage'
 import StorageIssuePage from './pages/StorageIssuePage'
 
@@ -76,6 +77,7 @@ export default function App() {
       <Route path="/mypage/address" element={<AuthFrame showNav={false}><AddressPage /></AuthFrame>} />
       <Route path="/mypage/notifications" element={<AuthFrame showNav={false}><NotificationSettingsPage /></AuthFrame>} />
       <Route path="/mypage/neighborhood" element={<AuthFrame showNav={false}><NeighborhoodSettingsPage /></AuthFrame>} />
+      <Route path="/mypage/tier" element={<AuthFrame showNav={false}><LeaderTierPage /></AuthFrame>} />
 
       <Route path="/pickup/overdue/:txId" element={<AuthFrame showNav={false}><PickupOverduePage /></AuthFrame>} />
       <Route path="/pickup/storage/:txId" element={<AuthFrame showNav={false}><StorageIssuePage /></AuthFrame>} />

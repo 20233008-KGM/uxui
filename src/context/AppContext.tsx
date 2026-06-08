@@ -43,6 +43,9 @@ interface AppContextValue {
   setLeaderDetailAddress: (v: string) => void
   inviteRewardClaimed: boolean
   claimInviteReward: (code: string) => void
+  /** 팀장 마일리지 (공구 열기 등으로 적립) */
+  leaderMileage: number
+  addLeaderMileage: (amount: number) => void
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -98,6 +101,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [inviteRewardClaimed, setInviteRewardClaimed] = useState(
     () => sessionStorage.getItem('gonggu_invite_claimed') !== null,
   )
+  const [leaderMileage, setLeaderMileage] = useState(() => {
+    const v = localStorage.getItem('gonggu_leader_mileage')
+    return v ? parseInt(v, 10) || 0 : 750
+  })
 
   const setParticipationRange = useCallback((r: NeighborhoodRange) => {
     setParticipationRangeState(r)
@@ -123,6 +130,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const setSkipActiveGroupBuyNotifications = useCallback((v: boolean) => {
     setSkipActiveGroupBuyState(v)
     localStorage.setItem('gonggu_skip_active', String(v))
+  }, [])
+
+  const addLeaderMileage = useCallback((amount: number) => {
+    setLeaderMileage((m) => {
+      const next = m + amount
+      localStorage.setItem('gonggu_leader_mileage', String(next))
+      return next
+    })
   }, [])
 
   const claimInviteReward = useCallback(
@@ -184,6 +199,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setLeaderDetailAddress,
         inviteRewardClaimed,
         claimInviteReward,
+        leaderMileage,
+        addLeaderMileage,
       }}
     >
       {children}

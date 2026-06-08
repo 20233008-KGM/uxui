@@ -85,6 +85,7 @@ export const screenGroups: ScreenGroup[] = [
     color: '#f59e0b',
     screens: [
       { name: '마이', path: '/mypage' },
+      { name: '팀장 등급', path: '/mypage/tier', note: '마일리지·반짝 이름' },
       { name: '프로필 · 구매 주기', path: '/mypage/profile' },
       { name: '포인트', path: '/mypage/points' },
       { name: '주소 관리', path: '/mypage/address' },

@@ -31,3 +31,52 @@ body {
   justify-content: center;
   align-items: flex-start;
 }
+
+@keyframes tier-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes tier-sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.15); }
+}
+
+.tier-sparkle-icon {
+  animation: tier-sparkle 2s ease-in-out infinite;
+}
+
+.tier-name-bronze {
+  color: #92400e;
+  text-shadow: 0 0 8px rgba(205, 127, 50, 0.35);
+}
+
+.tier-name-silver {
+  background: linear-gradient(90deg, #64748b, #e2e8f0, #64748b);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: tier-shimmer 3s linear infinite;
+}
+
+.tier-name-gold {
+  background: linear-gradient(90deg, #ca8a04, #fde047, #ca8a04);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: tier-shimmer 2.5s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.4));
+}
+
+.tier-name-platinum {
+  background: linear-gradient(90deg, #6366f1, #c4b5fd, #e879f9, #6366f1);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: tier-shimmer 2s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.5));
+}
