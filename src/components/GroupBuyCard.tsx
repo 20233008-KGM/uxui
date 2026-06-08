@@ -1,0 +1,99 @@
+import { Package, Droplets, FlaskConical } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import type { GroupBuy } from '../data/groupBuys'
+import { formatPrice, getProgress, getStatusStyle, getGroupBuyDistance } from '../data/groupBuys'
+import { SafePayBadge } from './SafePayBadge'
+import { DistanceBadge } from './LocationUI'
+
+function ProductIcon({ icon, size = 40 }: { icon: GroupBuy['icon']; size?: number }) {
+  const props = { size, className: 'text-gray-400', strokeWidth: 1.5 }
+  switch (icon) {
+    case 'droplet':
+      return <Droplets {...props} />
+    case 'bottle':
+      return <FlaskConical {...props} />
+    default:
+      return <Package {...props} />
+  }
+}
+
+export function GroupBuyCardLarge({ item }: { item: GroupBuy }) {
+  const progress = getProgress(item.current, item.max)
+  const distance = getGroupBuyDistance(item)
+
+  return (
+    <Link
+      to={`/detail/${item.id}`}
+      className="block bg-surface rounded-2xl overflow-hidden shadow-sm border border-border/50"
+    >
+      <div className="h-36 bg-gray-100 flex items-center justify-center">
+        <ProductIcon icon={item.icon} size={48} />
+      </div>
+      <div className="p-4">
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3 className="font-bold text-text text-[15px] leading-snug">{item.title}</h3>
+          <span className={`shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full ${getStatusStyle(item.status)}`}>
+            {item.statusLabel}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-text-secondary mb-3 flex-wrap">
+          <span>📍 {item.pickupPoint.label}</span>
+          <DistanceBadge meters={distance} compact />
+          <span>👥 {item.current}/{item.max}명</span>
+        </div>
+        <div className="flex items-end justify-between mb-2">
+          <span className="text-lg font-bold text-text">{formatPrice(item.price)} / 1인</span>
+          <SafePayBadge />
+        </div>
+        <div className="flex justify-end mb-2">
+          <span className="text-xs text-text-secondary">{item.daysLeft}</span>
+        </div>
+        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all ${item.status === 'complete' ? 'bg-gray-300' : 'bg-primary'}`}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+export function GroupBuyCardCompact({ item }: { item: GroupBuy }) {
+  const progress = getProgress(item.current, item.max)
+  const distance = getGroupBuyDistance(item)
+
+  return (
+    <Link
+      to={`/detail/${item.id}`}
+      className="flex gap-3 bg-surface rounded-2xl p-3 border border-border/50 shadow-sm"
+    >
+      <div className="w-20 h-20 shrink-0 bg-gray-100 rounded-xl flex items-center justify-center">
+        <ProductIcon icon={item.icon} size={32} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <h3 className="font-bold text-sm text-text truncate">{item.title}</h3>
+          <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full ${getStatusStyle(item.status)}`}>
+            {item.statusLabel}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-text-secondary mb-1 flex-wrap">
+          <span>📍 {item.pickupPoint.label}</span>
+          <DistanceBadge meters={distance} compact />
+          <span>👥 {item.current}/{item.max}명</span>
+        </div>
+        <div className="flex items-end justify-between mb-1.5">
+          <span className="text-sm font-bold text-text">{formatPrice(item.price)}/인</span>
+          <span className="text-[11px] text-text-secondary">{item.daysLeft}</span>
+        </div>
+        <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full ${item.status === 'complete' ? 'bg-gray-300' : 'bg-primary'}`}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+    </Link>
+  )
+}
