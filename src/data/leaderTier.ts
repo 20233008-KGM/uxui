@@ -93,3 +93,17 @@ export function getLeaderCommission(mileage: number, perPerson = BASE_COMMISSION
 export function formatCommissionShare(share: number) {
   return `${Math.round(share * 100)}%`
 }
+
+/** 데모: 4등급 동일 확률(25%) — 새로고침마다 해당 구간 마일리지 반환 */
+export function getRandomDemoMileage(): number {
+  const idx = Math.floor(Math.random() * LEADER_TIERS.length)
+  const tier = LEADER_TIERS[idx]
+  const nextTier = LEADER_TIERS[idx + 1]
+
+  if (!nextTier) {
+    return tier.minMileage + Math.floor(Math.random() * 801)
+  }
+
+  const max = nextTier.minMileage - 1
+  return tier.minMileage + Math.floor(Math.random() * (max - tier.minMileage + 1))
+}

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>우리동네 공구 — 기말프로젝트 발표</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" />
+  <style>
+    :root {
+      --r-main-font: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+      --r-heading-font: "Pretendard Variable", Pretendard, sans-serif;
+      --r-main-color: #1d1d1d;
+      --r-heading-color: #1d1d1d;
+      --r-link-color: #2a9d8f;
+      --brand: #2a9d8f;
+      --brand-dark: #1f7a6f;
+      --phone-w: 430;
+      --phone-h: 880;
+    }
+    .reveal { font-size: 28px; }
+    .reveal h1 { font-size: 1.8em; color: var(--brand-dark); }
+    .reveal h2 { font-size: 1.25em; color: var(--brand-dark); border-bottom: 3px solid var(--brand); padding-bottom: 0.2em; margin-bottom: 0.5em; }
+    .reveal h3 { font-size: 0.9em; color: #333; margin: 0 0 0.3em; }
+    .reveal .subtitle { color: #666; font-size: 0.75em; margin-top: 0.5em; }
+    .reveal .tag { display: inline-block; background: #edf7f5; color: var(--brand-dark); padding: 0.12em 0.55em; border-radius: 999px; font-size: 0.5em; font-weight: 600; margin: 0.08em; }
+    .reveal ul { text-align: left; }
+    .reveal li { margin-bottom: 0.3em; line-height: 1.4; }
+    .reveal table { font-size: 0.58em; margin: 0 auto; border-collapse: collapse; }
+    .reveal th { background: var(--brand); color: #fff; padding: 0.45em 0.7em; }
+    .reveal td { padding: 0.4em 0.7em; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+    .reveal .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; text-align: left; font-size: 0.65em; align-items: start; }
+    .reveal .text-col { font-size: 0.62em; }
+    .reveal .box { background: #f5f5f5; border-radius: 12px; padding: 0.7em 0.9em; text-align: left; font-size: 0.62em; }
+    .reveal .box-accent { background: #edf7f5; border-left: 4px solid var(--brand); }
+    .reveal .ia-tree { font-size: 0.52em; text-align: left; font-family: ui-monospace, monospace; line-height: 1.55; background: #fafafa; padding: 0.8em; border-radius: 8px; }
+    .reveal .flow { font-size: 0.5em; text-align: center; color: #444; }
+    .reveal .flow span { background: #fff; border: 2px solid var(--brand); border-radius: 8px; padding: 0.25em 0.5em; margin: 0.1em; display: inline-block; }
+    .reveal .flow .arrow { border: none; background: none; color: var(--brand); font-weight: bold; }
+    .reveal .title-slide { text-align: center; }
+    .reveal .title-slide h1 { font-size: 2em; margin-bottom: 0.2em; }
+    .reveal .demo-link { font-size: 0.6em; word-break: break-all; }
+    .reveal .small { font-size: 0.5em; color: #888; }
+
+    /* 폰 목업 */
+    .phones { display: flex; justify-content: center; align-items: flex-end; gap: 1em; flex-wrap: wrap; }
+    .phones.tight { gap: 0.6em; }
+    .phones.spread { gap: 1.4em; }
+    .phone-wrap { display: flex; flex-direction: column; align-items: center; }
+    .phone-label { font-size: 0.42em; font-weight: 600; color: #555; margin-top: 0.35em; text-align: center; max-width: 140px; line-height: 1.3; }
+    .phone {
+      border-radius: 22px;
+      padding: 5px;
+      background: linear-gradient(145deg, rgba(42,157,143,0.55), #2a2a2a);
+      box-shadow: 0 10px 36px rgba(0,0,0,0.18);
+      line-height: 0;
+    }
+    .phone-inner {
+      border-radius: 18px;
+      overflow: hidden;
+      background: #111;
+      position: relative;
+    }
+    .phone-inner img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+    /* scale: outer width / 430 */
+    .phone.sm .phone-inner { width: 129px; height: 264px; }
+    .phone.md .phone-inner { width: 172px; height: 352px; }
+    .phone.lg .phone-inner { width: 215px; height: 440px; }
+
+    .slide-split { display: grid; grid-template-columns: 1fr 1.1fr; gap: 1em; align-items: center; text-align: left; }
+    .slide-split .phones { justify-content: flex-end; }
+    .screen-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5em; justify-items: center; }
+    .screen-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8em; justify-items: center; }
+    .hero-phones { margin-top: 0.6em; }
+    .caption-bar { font-size: 0.48em; color: #666; text-align: center; margin-top: 0.4em; }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- 1. 표지 + 히어로 화면 -->
+      <section class="title-slide">
+        <p class="tag">기말프로젝트 · UX/UI</p>
+        <h1>우리동네 공구</h1>
+        <p class="subtitle">동네 이웃과 함께하는 생필품 공동구매 플랫폼</p>
+        <p style="font-size: 0.65em; margin: 0.4em 0;">
+          <strong>[팀명]</strong> · 발표: <strong>[발표자명]</strong>
+        </p>
+        <div class="phones spread hero-phones">
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/09-landing.png" alt="랜딩" /></div></div>
+            <span class="phone-label">랜딩</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone md"><div class="phone-inner"><img src="screens/01-home.png" alt="홈" /></div></div>
+            <span class="phone-label">홈 · 초대 이벤트</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/02-explore.png" alt="탐색" /></div></div>
+            <span class="phone-label">공구 탐색</span>
+          </div>
+        </div>
+        <p class="small" style="margin-top: 0.5em;">발표 15~20분 · 프로토타입: uxui-ecru.vercel.app</p>
+      </section>
+
+      <!-- 2. 목차 -->
+      <section>
+        <h2>발표 목차</h2>
+        <div class="slide-split">
+          <ol style="font-size: 0.68em; margin: 0; padding-left: 1.2em;">
+            <li>문제 &amp; 타겟</li>
+            <li>서비스 컨셉 &amp; 기능 근거</li>
+            <li>IA · 유저플로우</li>
+            <li><strong>프로토타입 화면</strong></li>
+            <li>엣지케이스 UX</li>
+            <li>Q&amp;A</li>
+          </ol>
+          <div class="phones tight">
+            <div class="phone-wrap">
+              <div class="phone sm"><div class="phone-inner"><img src="screens/03-detail.png" alt="상세" /></div></div>
+              <span class="phone-label">공구 상세</span>
+            </div>
+            <div class="phone-wrap">
+              <div class="phone sm"><div class="phone-inner"><img src="screens/04-open.png" alt="공구열기" /></div></div>
+              <span class="phone-label">공구 열기</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 문제 -->
+      <section>
+        <h2>1. 해결하려는 문제</h2>
+        <div class="slide-split">
+          <div class="text-col">
+            <div class="box box-accent" style="margin-bottom: 0.6em;">
+              <h3>Pain Point</h3>
+              <ul>
+                <li>1인 구매 → <strong>대량 할인</strong> 제한</li>
+                <li>카톡 공구 → <strong>환불·먹튀·위치</strong> 불투명</li>
+                <li>팀장 부담 → <strong>진입 장벽</strong></li>
+              </ul>
+            </div>
+            <div class="box">
+              <h3>기회</h3>
+              <ul>
+                <li>동네 + 생필품 반복 구매</li>
+                <li>10~50명 단위 공구</li>
+                <li>에스크로·지도·등급</li>
+              </ul>
+            </div>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone lg"><div class="phone-inner"><img src="screens/02-explore.png" alt="탐색 — 최소 인원·거리" /></div></div>
+            <span class="phone-label">동네 공구 탐색 · 최소 N명부터</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 타겟 -->
+      <section>
+        <h2>2. 타겟 사용자</h2>
+        <table style="font-size: 0.52em; margin-bottom: 0.6em;">
+          <tr><th>페르소나</th><th>니즈</th><th>화면</th></tr>
+          <tr><td><strong>참여자</strong></td><td>저렴·가까운 수령·안전 결제</td><td>탐색·상세·공구페이</td></tr>
+          <tr><td><strong>팀장</strong></td><td>간편 개설·수수료</td><td>공구 열기·등급</td></tr>
+        </table>
+        <div class="phones">
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/05-payment.png" alt="결제" /></div></div>
+            <span class="phone-label">참여자 · 공구페이</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/04-open.png" alt="열기" /></div></div>
+            <span class="phone-label">팀장 · 카탈로그·위치</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/07-tier.png" alt="등급" /></div></div>
+            <span class="phone-label">팀장 · 등급·수수료</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. 컨셉 + 화면 -->
+      <section>
+        <h2>3. 서비스 컨셉</h2>
+        <p style="font-size: 0.72em; font-weight: 600; color: var(--brand-dark); margin-bottom: 0.5em;">
+          플랫폼 품목·가격 제공 → 이웃 팀장이 동네에서 수령
+        </p>
+        <div class="screen-grid-4">
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/01-home.png" alt="홈" /></div></div>
+            <span class="phone-label">공구페이 안내</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/03-detail.png" alt="상세" /></div></div>
+            <span class="phone-label">실사 상품·지도</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/04-open.png" alt="열기" /></div></div>
+            <span class="phone-label">고정가 카탈로그</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/11-neighborhood.png" alt="범위" /></div></div>
+            <span class="phone-label">참여·노출 범위</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. 기능 근거 -->
+      <section>
+        <h2>4. 핵심 기능과 근거</h2>
+        <div class="slide-split">
+          <table>
+            <tr><th>기능</th><th>근거</th></tr>
+            <tr><td>공구페이</td><td>먹튀 방지 (edge §1)</td></tr>
+            <tr><td>OSM 지도</td><td>멀리 참여 방지 (§5)</td></tr>
+            <tr><td>카탈로그</td><td>허위 등록 방지 (§2)</td></tr>
+            <tr><td>등급제</td><td>팀장 동기 (§1)</td></tr>
+          </table>
+          <div class="phone-wrap">
+            <div class="phone lg"><div class="phone-inner"><img src="screens/03-detail.png" alt="상세 — 지도·공구페이" /></div></div>
+            <span class="phone-label">상세 — 수령 지도 + 공구페이</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. IA -->
+      <section>
+        <h2>5. 정보 구조도 (IA)</h2>
+        <div class="slide-split">
+          <pre class="ia-tree" style="margin:0;">우리동네 공구
+├── 진입·인증
+├── 메인·탐색
+├── 공구 열기 [팀장]
+├── 결제·모집
+├── 채팅·수령·후기
+├── 예외·환불·분쟁
+├── 마이페이지
+└── 이벤트·초대
+
+탭: 홈|탐색|＋|채팅|마이
+<strong>38+ 화면</strong></pre>
+          <div class="phones tight">
+            <div class="phone-wrap">
+              <div class="phone sm"><div class="phone-inner"><img src="screens/06-mypage.png" alt="마이" /></div></div>
+              <span class="phone-label">마이페이지</span>
+            </div>
+            <div class="phone-wrap">
+              <div class="phone sm"><div class="phone-inner"><img src="screens/08-invite.png" alt="초대" /></div></div>
+              <span class="phone-label">지인 초대</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. 참여자 플로우 -->
+      <section>
+        <h2>6. 유저플로우 — 참여자</h2>
+        <div class="flow" style="margin-bottom: 0.5em;">
+          <span>홈</span><span class="arrow">→</span><span>탐색</span><span class="arrow">→</span>
+          <span>상세</span><span class="arrow">→</span><span>결제</span><span class="arrow">→</span>
+          <span>모집</span><span class="arrow">→</span><span>수령</span>
+        </div>
+        <div class="screen-grid-4">
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/01-home.png" alt="" /></div></div>
+            <span class="phone-label">① 홈</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/02-explore.png" alt="" /></div></div>
+            <span class="phone-label">② 탐색</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/03-detail.png" alt="" /></div></div>
+            <span class="phone-label">③ 상세</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/05-payment.png" alt="" /></div></div>
+            <span class="phone-label">④ 공구페이</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. 팀장 플로우 -->
+      <section>
+        <h2>7. 유저플로우 — 팀장</h2>
+        <div class="flow" style="margin-bottom: 0.5em;">
+          <span>공구 열기</span><span class="arrow">→</span><span>카탈로그</span><span class="arrow">→</span>
+          <span>위치</span><span class="arrow">→</span><span>결제</span><span class="arrow">→</span><span>초대</span>
+        </div>
+        <div class="screen-grid-3">
+          <div class="phone-wrap">
+            <div class="phone md"><div class="phone-inner"><img src="screens/04-open.png" alt="" /></div></div>
+            <span class="phone-label">품목 선택 · 위치 · OSM 지도</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone md"><div class="phone-inner"><img src="screens/07-tier.png" alt="" /></div></div>
+            <span class="phone-label">등급별 수수료 미리보기</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone md"><div class="phone-inner"><img src="screens/08-invite.png" alt="" /></div></div>
+            <span class="phone-label">지인 초대 이벤트</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. 프로토타입 진화 -->
+      <section>
+        <h2>8. 와이어프레임 → 프로토타입</h2>
+        <div class="screen-grid-3">
+          <div class="phone-wrap">
+            <div class="phone md"><div class="phone-inner"><img src="screens/09-landing.png" alt="" /></div></div>
+            <span class="phone-label">진입 · USP</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone md"><div class="phone-inner"><img src="screens/02-explore.png" alt="" /></div></div>
+            <span class="phone-label">탐색 · 실사 카드</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone md"><div class="phone-inner"><img src="screens/04-open.png" alt="" /></div></div>
+            <span class="phone-label">개설 · 카탈로그 UI</span>
+          </div>
+        </div>
+        <p class="caption-bar">React 프로토타입 · <a href="https://uxui-ecru.vercel.app" target="_blank">uxui-ecru.vercel.app</a> · 화면보드 /screens</p>
+      </section>
+
+      <!-- 11. 핵심 화면 갤러리 -->
+      <section>
+        <h2>9. 핵심 화면 (1/2)</h2>
+        <div class="screen-grid-4">
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/01-home.png" alt="" /></div></div>
+            <span class="phone-label">홈 + 초대 배너</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/02-explore.png" alt="" /></div></div>
+            <span class="phone-label">탐색 · 최소 인원</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/03-detail.png" alt="" /></div></div>
+            <span class="phone-label">상세 · 지도</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/05-payment.png" alt="" /></div></div>
+            <span class="phone-label">공구페이 결제</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>9. 핵심 화면 (2/2)</h2>
+        <div class="screen-grid-4">
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/04-open.png" alt="" /></div></div>
+            <span class="phone-label">공구 열기</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/06-mypage.png" alt="" /></div></div>
+            <span class="phone-label">마이 · 반짝 이름</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/07-tier.png" alt="" /></div></div>
+            <span class="phone-label">팀장 등급</span>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/11-neighborhood.png" alt="" /></div></div>
+            <span class="phone-label">동네 범위</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. 엣지케이스 -->
+      <section>
+        <h2>10. 엣지케이스 대응 UX</h2>
+        <div class="slide-split">
+          <table>
+            <tr><th>리스크</th><th>화면</th></tr>
+            <tr><td>모집 실패</td><td>자동 환불 안내</td></tr>
+            <tr><td>팀장 연락 두절</td><td>신고 플로우</td></tr>
+            <tr><td>콜드스타트</td><td>범위 확장 설정</td></tr>
+            <tr><td>수령·분쟁</td><td>전용 예외 화면</td></tr>
+          </table>
+          <div class="phone-wrap">
+            <div class="phone lg"><div class="phone-inner"><img src="screens/10-failure.png" alt="모집 실패" /></div></div>
+            <span class="phone-label">모집 실패 → 환불 플로우</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13. 디자인 -->
+      <section>
+        <h2>11. UI · Lightroom 톤</h2>
+        <div class="slide-split">
+          <ul class="text-col" style="font-size: 0.6em;">
+            <li>중립 그레이 배경 · 선명한 텍스트</li>
+            <li>lr-card 그림자 · 상품 이미지 중심</li>
+            <li>등급별 반짝 이름 효과</li>
+            <li>최소 인원 주황 강조</li>
+          </ul>
+          <div class="phones tight">
+            <div class="phone-wrap">
+              <div class="phone md"><div class="phone-inner"><img src="screens/02-explore.png" alt="" /></div></div>
+              <span class="phone-label">카드 UI</span>
+            </div>
+            <div class="phone-wrap">
+              <div class="phone md"><div class="phone-inner"><img src="screens/06-mypage.png" alt="" /></div></div>
+              <span class="phone-label">등급 비주얼</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 14. 기술 -->
+      <section>
+        <h2>12. 구현 요약</h2>
+        <div class="two-col" style="font-size: 0.6em;">
+          <ul>
+            <li>React + TypeScript + Vite</li>
+            <li>38+ 화면 · Vercel 배포</li>
+            <li>14차 이터레이션</li>
+          </ul>
+          <ul>
+            <li>OSM 지도 · WebP 상품</li>
+            <li>/screens 화면 보드</li>
+            <li>Mock 결제 (데모)</li>
+          </ul>
+        </div>
+        <div class="phones" style="margin-top: 0.5em;">
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/01-home.png" alt="" /></div></div>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/03-detail.png" alt="" /></div></div>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/04-open.png" alt="" /></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 15. 마무리 -->
+      <section class="title-slide">
+        <h2 style="border: none; font-size: 1.5em;">감사합니다</h2>
+        <p style="font-size: 0.75em;">동네에서 같이 사면, 같이 싸게</p>
+        <div class="phones spread" style="margin: 0.8em 0;">
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/02-explore.png" alt="" /></div></div>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone md"><div class="phone-inner"><img src="screens/01-home.png" alt="" /></div></div>
+          </div>
+          <div class="phone-wrap">
+            <div class="phone sm"><div class="phone-inner"><img src="screens/07-tier.png" alt="" /></div></div>
+          </div>
+        </div>
+        <p class="demo-link"><a href="https://uxui-ecru.vercel.app" target="_blank">https://uxui-ecru.vercel.app</a></p>
+        <p class="small">Q &amp; A</p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      transition: 'slide',
+      width: 1280,
+      height: 720,
+      margin: 0.06,
+    });
+  </script>
+</body>
+</html>

@@ -26,6 +26,7 @@ export function BottomNav() {
               <Link
                 key={item.path}
                 to={item.path}
+                aria-label="공구 열기"
                 className="flex flex-col items-center -mt-5"
               >
                 <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-[var(--shadow-lr-md)] ring-2 ring-white">
@@ -40,6 +41,7 @@ export function BottomNav() {
             <Link
               key={item.path}
               to={item.path}
+              aria-current={isActive ? 'page' : undefined}
               className={`flex flex-col items-center gap-1 py-1 min-w-[48px] ${
                 isActive ? 'text-primary' : 'text-text-secondary'
               }`}

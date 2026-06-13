@@ -2,7 +2,7 @@ import { ChevronDown, Wifi, BatteryFull } from 'lucide-react'
 
 export function StatusBar() {
   return (
-    <div className="flex items-center justify-between px-5 pt-3 pb-1 text-xs font-semibold text-text">
+    <div className="flex items-center justify-between px-5 pt-3 pb-1 text-xs font-semibold text-text lg:hidden">
       <span>9:41</span>
       <div className="flex items-center gap-1">
         <Wifi size={14} />

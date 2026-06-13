@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>우리동네 공구 · 프로덕트 발표</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+:root{
+  --brand:#2a9d8f; --brand-d:#1f6f64; --brand-l:#5fc7ba;
+  --warm:#f4a261; --warm-d:#e76f51;
+  --ink:#10211f; --ink-soft:#3c4f4c; --mut:#7a8a87;
+  --paper:#f4f7f6; --line:#e2ebe9;
+  --bronze:#cd7f32; --silver:#94a3b8; --gold:#eab308; --plat:#818cf8;
+  --r-main-font:"Pretendard Variable",Pretendard,-apple-system,sans-serif;
+  --r-heading-font:"Pretendard Variable",Pretendard,sans-serif;
+}
+*{ -webkit-font-smoothing:antialiased; }
+html,body{ background:#0c1413; }
+.reveal{ font-family:var(--r-main-font); font-size:26px; color:var(--ink); }
+.reveal .slides{ text-align:left; }
+.reveal section{ height:100%; }
+
+/* ---------- canvas backdrop ---------- */
+.reveal .slides section{
+  background:linear-gradient(160deg,#ffffff 0%,#f1f7f5 60%,#e8f2ef 100%);
+  border-radius:0; padding:46px 60px;
+  box-sizing:border-box;
+}
+.reveal .slides section.dark{
+  background:radial-gradient(120% 120% at 12% 8%, #14403a 0%, #0d2723 45%, #081715 100%);
+  color:#eaf6f3;
+}
+.reveal .dark h1,.reveal .dark h2,.reveal .dark h3{ color:#fff; }
+.reveal .dark .mut{ color:#9fc4bd; }
+
+/* ---------- typography ---------- */
+.reveal h1{ font-size:2.55em; font-weight:800; letter-spacing:-.03em; line-height:1.02; color:var(--ink); margin:0; }
+.reveal h2{ font-size:1.42em; font-weight:800; letter-spacing:-.02em; color:var(--brand-d); margin:0 0 .55em; }
+.reveal h3{ font-size:.82em; font-weight:700; color:var(--ink); margin:0 0 .25em; }
+.reveal p{ line-height:1.5; margin:.3em 0; }
+.mut{ color:var(--mut); }
+.reveal strong{ color:var(--brand-d); font-weight:800; }
+.reveal .dark strong{ color:var(--brand-l); }
+.kicker{ display:inline-flex; align-items:center; gap:.5em; font-size:.5em; font-weight:800; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--brand-d); background:rgba(42,157,143,.1);
+  padding:.5em 1em; border-radius:999px; }
+.dark .kicker{ color:var(--brand-l); background:rgba(95,199,186,.14); }
+.eyebrow{ font-size:.52em; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--warm-d); margin-bottom:.7em; }
+
+/* ---------- layout helpers ---------- */
+.row{ display:flex; gap:34px; }
+.between{ justify-content:space-between; }
+.center{ align-items:center; }
+.col{ display:flex; flex-direction:column; }
+.grow{ flex:1; }
+.full{ height:100%; }
+.stack>*+*{ margin-top:.5em; }
+.head-rule{ width:54px; height:5px; border-radius:9px; background:linear-gradient(90deg,var(--brand),var(--warm)); margin:.1em 0 .8em; }
+
+/* ---------- chips / tags ---------- */
+.chip{ display:inline-block; font-size:.5em; font-weight:700; padding:.32em .75em; border-radius:999px;
+  background:#fff; border:1px solid var(--line); color:var(--ink-soft); }
+.chip.b{ background:rgba(42,157,143,.12); border-color:transparent; color:var(--brand-d); }
+.chip.w{ background:rgba(244,162,97,.16); border-color:transparent; color:var(--warm-d); }
+
+/* ---------- cards ---------- */
+.card{ background:#fff; border:1px solid var(--line); border-radius:18px; padding:20px 22px;
+  box-shadow:0 14px 34px -22px rgba(16,33,31,.4); }
+.card.flat{ box-shadow:none; }
+.dark .card{ background:rgba(255,255,255,.045); border-color:rgba(255,255,255,.09); color:#eaf6f3; box-shadow:none; }
+.grid{ display:grid; gap:16px; }
+.g2{ grid-template-columns:1fr 1fr; }
+.g3{ grid-template-columns:repeat(3,1fr); }
+.g4{ grid-template-columns:repeat(4,1fr); }
+
+/* feature card */
+.feat{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px 18px;
+  box-shadow:0 12px 28px -22px rgba(16,33,31,.5); }
+.feat .ico{ width:42px; height:42px; border-radius:12px; display:grid; place-items:center; font-size:.85em;
+  background:linear-gradient(150deg,var(--brand),var(--brand-d)); color:#fff; margin-bottom:.5em; }
+.feat h3{ font-size:.7em; }
+.feat p{ font-size:.52em; color:var(--mut); line-height:1.45; margin:.15em 0 0; }
+.feat .why{ font-size:.46em; font-weight:700; color:var(--warm-d); margin-top:.45em; }
+
+/* stat */
+.statn{ font-size:2.7em; font-weight:800; letter-spacing:-.04em; line-height:1;
+  background:linear-gradient(120deg,var(--brand-d),var(--brand-l)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.dark .statn{ background:linear-gradient(120deg,#7fe8da,#bdf3ec); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.statl{ font-size:.5em; font-weight:700; color:var(--mut); margin-top:.3em; }
+
+/* ---------- phone mockups ---------- */
+.phone{ border-radius:30px; padding:6px; background:linear-gradient(150deg,#2f3a39,#0c1413);
+  box-shadow:0 30px 60px -28px rgba(8,23,21,.7), 0 6px 16px -8px rgba(8,23,21,.5); line-height:0; position:relative; }
+.phone::after{ content:""; position:absolute; top:13px; left:50%; transform:translateX(-50%);
+  width:34%; height:6px; border-radius:99px; background:#0c1413; }
+.phone .scr{ border-radius:25px; overflow:hidden; background:#000; }
+.phone img{ display:block; width:100%; height:100%; object-fit:cover; object-position:top; }
+.phone.xs .scr{ width:126px; height:258px; }
+.phone.s  .scr{ width:158px; height:323px; }
+.phone.m  .scr{ width:196px; height:401px; }
+.phone.l  .scr{ width:236px; height:483px; }
+.pcap{ font-size:.44em; font-weight:700; color:var(--ink-soft); text-align:center; margin-top:.7em; line-height:1.3; max-width:170px; }
+.dark .pcap{ color:#bcd9d3; }
+.phone-set{ display:flex; align-items:flex-end; gap:24px; }
+.phone-wrap{ display:flex; flex-direction:column; align-items:center; }
+
+/* float anim for hero */
+@keyframes floaty{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-14px) } }
+.fl{ animation:floaty 5s ease-in-out infinite; }
+.fl.d1{ animation-delay:-1.6s } .fl.d2{ animation-delay:-3.2s }
+.glow{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.55; pointer-events:none; }
+
+/* ---------- flow ---------- */
+.flow{ display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.flow .node{ font-size:.56em; font-weight:700; padding:.5em .85em; border-radius:11px; background:#fff;
+  border:1.5px solid var(--brand-l); color:var(--brand-d); }
+.flow .node.k{ background:linear-gradient(150deg,var(--brand),var(--brand-d)); color:#fff; border-color:transparent; }
+.flow .arr{ color:var(--warm); font-weight:800; font-size:.6em; }
+.flow .node.alt{ border-color:var(--warm); color:var(--warm-d); border-style:dashed; }
+
+/* ---------- tier viz ---------- */
+.tier-rail{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; align-items:end; }
+.tierc{ border-radius:16px; padding:16px 14px 18px; color:#fff; position:relative; overflow:hidden;
+  box-shadow:0 18px 36px -22px rgba(0,0,0,.6); }
+.tierc .pct{ font-size:1.9em; font-weight:800; line-height:1; letter-spacing:-.03em; }
+.tierc .nm{ font-size:.62em; font-weight:800; margin-bottom:.2em; }
+.tierc .ml{ font-size:.44em; opacity:.92; margin-top:.45em; font-weight:600; }
+.tierc .lab{ font-size:.4em; opacity:.85; }
+.tier-bronze{ background:linear-gradient(155deg,#e3a063,#a05a1f); }
+.tier-silver{ background:linear-gradient(155deg,#b9c4d0,#6b7a8c); }
+.tier-gold{ background:linear-gradient(155deg,#f5cf4d,#c08a05); }
+.tier-plat{ background:linear-gradient(155deg,#a3aef7,#5b66d6); }
+.tierc.tall{ padding-top:34px; }
+
+/* ---------- table ---------- */
+.tbl{ width:100%; border-collapse:collapse; font-size:.56em; }
+.tbl th{ text-align:left; background:var(--brand); color:#fff; padding:.6em .9em; font-weight:700; }
+.tbl th:first-child{ border-radius:9px 0 0 9px; } .tbl th:last-child{ border-radius:0 9px 9px 0; }
+.tbl td{ padding:.55em .9em; border-bottom:1px solid var(--line); vertical-align:top; }
+.tbl tr:last-child td{ border-bottom:none; }
+
+/* progress + chrome */
+.reveal .progress{ height:4px; color:var(--warm); }
+.reveal .slide-number{ background:transparent; color:var(--mut); font-size:13px; font-weight:700; right:18px; bottom:14px; }
+.brandmark{ position:fixed; left:22px; bottom:14px; z-index:30; font-size:13px; font-weight:800; letter-spacing:-.01em; color:var(--brand-d); opacity:.8; }
+.dark ~ .brandmark{ color:#fff; }
+
+/* misc */
+.big-quote{ font-size:1.55em; font-weight:800; letter-spacing:-.02em; line-height:1.22; }
+.under{ background:linear-gradient(transparent 62%, rgba(244,162,97,.45) 62%); }
+.dot{ width:7px; height:7px; border-radius:50%; background:var(--warm); display:inline-block; margin-right:.5em; }
+.list-clean{ list-style:none; padding:0; margin:0; }
+.list-clean li{ font-size:.62em; padding:.32em 0; display:flex; gap:.5em; align-items:flex-start; }
+.list-clean li::before{ content:"›"; color:var(--brand); font-weight:800; }
+.link{ color:var(--brand-d); font-weight:700; text-decoration:none; border-bottom:2px solid var(--warm); }
+.dark .link{ color:#bff3ec; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ 1 · TITLE ============ -->
+<section data-background-color="#081715" class="dark">
+  <div class="glow" style="width:420px;height:420px;background:#2a9d8f;top:-90px;left:-80px;"></div>
+  <div class="glow" style="width:340px;height:340px;background:#f4a261;bottom:-110px;right:120px;opacity:.32;"></div>
+  <div class="row between full center">
+    <div class="col" style="max-width:54%;">
+      <span class="kicker">● Product Design · UX/UI 기말</span>
+      <h1 style="margin:.35em 0 .2em;">우리동네<br/><span style="color:var(--brand-l)">공구</span></h1>
+      <p style="font-size:.8em; color:#bfe0d9; max-width:18em;">
+        동네 이웃과 함께 <strong>같이 사서, 같이 싸게</strong>.<br/>
+        생필품 공동구매를 안전하게 잇는 하이퍼로컬 커머스.
+      </p>
+      <div class="row" style="gap:10px; margin-top:1.4em;">
+        <span class="chip b">에스크로 공구페이</span>
+        <span class="chip b">동네 범위 매칭</span>
+        <span class="chip w">팀장 등급제</span>
+      </div>
+      <p style="font-size:.56em; color:#7fa8a0; margin-top:1.8em;">
+        <strong style="color:#cfeae5">[팀명]</strong> · 발표 <strong style="color:#cfeae5">[발표자명]</strong> &nbsp;·&nbsp; 데모 <span class="link">uxui-ecru.vercel.app</span>
+      </p>
+    </div>
+    <div class="phone-set" style="gap:18px;">
+      <div class="phone s"><div class="scr"><img src="screens/09-landing.png" alt="랜딩"/></div></div>
+      <div class="phone m"><div class="scr"><img src="screens/01-home.png" alt="홈"/></div></div>
+      <div class="phone s"><div class="scr"><img src="screens/02-explore.png" alt="탐색"/></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · AGENDA ============ -->
+<section>
+  <span class="eyebrow">Agenda</span>
+  <h2>오늘 이야기할 것</h2>
+  <div class="head-rule"></div>
+  <div class="row between center" style="margin-top:.4em;">
+    <div class="grid g2" style="width:60%; gap:12px 30px;">
+      <div class="row center" style="gap:14px;"><span class="statn" style="font-size:1.3em;">01</span><div><h3>문제 · 타겟 사용자</h3><p class="mut" style="font-size:.5em;margin:0;">누구의 어떤 불편인가</p></div></div>
+      <div class="row center" style="gap:14px;"><span class="statn" style="font-size:1.3em;">02</span><div><h3>컨셉 도출 · 리서치</h3><p class="mut" style="font-size:.5em;margin:0;">아이디어가 나온 과정</p></div></div>
+      <div class="row center" style="gap:14px;"><span class="statn" style="font-size:1.3em;">03</span><div><h3>서비스 컨셉 · 근거</h3><p class="mut" style="font-size:.5em;margin:0;">기능마다 이유가 있다</p></div></div>
+      <div class="row center" style="gap:14px;"><span class="statn" style="font-size:1.3em;">04</span><div><h3>정보 구조도 (IA)</h3><p class="mut" style="font-size:.5em;margin:0;">8그룹 · 38화면 지도</p></div></div>
+      <div class="row center" style="gap:14px;"><span class="statn" style="font-size:1.3em;">05</span><div><h3>유저플로우 · 프로토타입</h3><p class="mut" style="font-size:.5em;margin:0;">동작형 화면 흐름</p></div></div>
+      <div class="row center" style="gap:14px;"><span class="statn" style="font-size:1.3em;">06</span><div><h3>엣지케이스 · 구현</h3><p class="mut" style="font-size:.5em;margin:0;">신뢰와 디테일</p></div></div>
+    </div>
+    <div class="phone-set">
+      <div class="phone s"><div class="scr"><img src="screens/03-detail.png" alt="상세"/></div></div>
+      <div class="phone s"><div class="scr"><img src="screens/07-tier.png" alt="등급"/></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · PROBLEM ============ -->
+<section>
+  <span class="eyebrow">01 · Problem</span>
+  <h2>혼자 사면 비싸고, 같이 사면 불안하다</h2>
+  <div class="head-rule"></div>
+  <div class="grid g3" style="margin-top:.5em;">
+    <div class="card">
+      <div class="chip w" style="margin-bottom:.6em;">1인 구매</div>
+      <h3 style="font-size:.72em;">대량 할인에서 소외</h3>
+      <p class="mut" style="font-size:.54em;">생필품은 반복 구매인데, 혼자서는 묶음 단가의 혜택을 받지 못한다.</p>
+    </div>
+    <div class="card">
+      <div class="chip w" style="margin-bottom:.6em;">카톡 공구</div>
+      <h3 style="font-size:.72em;">먹튀·환불·위치 불투명</h3>
+      <p class="mut" style="font-size:.54em;">선입금 후 잠수, 환불 불가, 수령 장소가 너무 먼 분쟁이 반복된다.</p>
+    </div>
+    <div class="card">
+      <div class="chip w" style="margin-bottom:.6em;">팀장 부담</div>
+      <h3 style="font-size:.72em;">개설·정산이 귀찮다</h3>
+      <p class="mut" style="font-size:.54em;">총대를 멜 사람이 없으면 공구 자체가 시작되지 않는다.</p>
+    </div>
+  </div>
+  <div class="card flat" style="margin-top:18px; background:linear-gradient(120deg,#fff,#eef7f4); border:none; display:flex; gap:24px; align-items:center;">
+    <div class="big-quote" style="font-size:1.05em; color:var(--ink);">신뢰만 해결되면, <span class="under">동네 공구는 가장 자연스러운 절약</span>이다.</div>
+  </div>
+</section>
+
+<!-- ============ 3b · TARGET PERSONA ============ -->
+<section>
+  <span class="eyebrow">01 · Target User</span>
+  <h2>이 서비스는 누구를 위한 것인가</h2>
+  <div class="head-rule"></div>
+  <div class="grid g3" style="margin-top:.3em;">
+    <div class="card">
+      <div class="row center" style="gap:12px; margin-bottom:.5em;">
+        <span style="font-size:1.5em;">🧺</span>
+        <div><h3 style="font-size:.74em;">절약형 참여자</h3><p class="mut" style="font-size:.46em; margin:0;">1인가구 · 자취생 · 주부</p></div>
+      </div>
+      <p style="font-size:.5em; color:var(--ink-soft); margin:.2em 0;"><b style="color:var(--brand-d)">원함</b> — 생필품을 가깝고 저렴하게, 결제는 안전하게</p>
+      <p style="font-size:.5em; color:var(--ink-soft); margin:.2em 0;"><b style="color:var(--warm-d)">불편</b> — 묶음 할인은 비싸고, 카톡 공구는 먹튀가 무섭다</p>
+      <div class="row" style="gap:6px; margin-top:.5em; flex-wrap:wrap;"><span class="chip b">탐색</span><span class="chip b">상세·지도</span><span class="chip b">공구페이</span></div>
+    </div>
+    <div class="card" style="border-color:var(--brand-l); box-shadow:0 16px 34px -20px rgba(42,157,143,.5);">
+      <div class="row center" style="gap:12px; margin-bottom:.5em;">
+        <span style="font-size:1.5em;">⭐</span>
+        <div><h3 style="font-size:.74em;">동네 팀장 <span class="chip w" style="vertical-align:middle;">핵심</span></h3><p class="mut" style="font-size:.46em; margin:0;">적극적 이웃 · 공구 주도형</p></div>
+      </div>
+      <p style="font-size:.5em; color:var(--ink-soft); margin:.2em 0;"><b style="color:var(--brand-d)">원함</b> — 간편한 개설, 정당한 보상, 프라이버시 보호</p>
+      <p style="font-size:.5em; color:var(--ink-soft); margin:.2em 0;"><b style="color:var(--warm-d)">불편</b> — 가격·정산 계산이 번거롭고 총대 부담이 크다</p>
+      <div class="row" style="gap:6px; margin-top:.5em; flex-wrap:wrap;"><span class="chip b">공구 열기</span><span class="chip b">등급·수수료</span><span class="chip b">지인 초대</span></div>
+    </div>
+    <div class="card">
+      <div class="row center" style="gap:12px; margin-bottom:.5em;">
+        <span style="font-size:1.5em;">🛡️</span>
+        <div><h3 style="font-size:.74em;">플랫폼</h3><p class="mut" style="font-size:.46em; margin:0;">신뢰 · 공급 생태계 운영</p></div>
+      </div>
+      <p style="font-size:.5em; color:var(--ink-soft); margin:.2em 0;"><b style="color:var(--brand-d)">원함</b> — 허위 등록·분쟁 최소화, 지속되는 공구 공급</p>
+      <p style="font-size:.5em; color:var(--ink-soft); margin:.2em 0;"><b style="color:var(--warm-d)">불편</b> — 신뢰가 무너지면 양면 시장이 함께 붕괴한다</p>
+      <div class="row" style="gap:6px; margin-top:.5em; flex-wrap:wrap;"><span class="chip b">카탈로그</span><span class="chip b">에스크로</span><span class="chip b">등급제</span></div>
+    </div>
+  </div>
+  <p class="mut" style="font-size:.5em; margin-top:14px;">→ <b style="color:var(--brand-d)">참여자·팀장 양면 시장</b>. 팀장의 공급 동기를 설계하는 것이 성패를 가른다.</p>
+</section>
+
+<!-- ============ 4 · OPPORTUNITY / INSIGHT ============ -->
+<section class="dark" data-background-color="#0d2723">
+  <span class="eyebrow" style="color:var(--warm)">01 · Insight</span>
+  <h2 style="color:#fff;">세 가지가 겹치는 자리</h2>
+  <div class="head-rule"></div>
+  <div class="row between center">
+    <div class="grid" style="grid-template-columns:1fr; gap:14px; width:52%;">
+      <div class="card row center" style="gap:18px;"><span class="statn" style="font-size:1.1em;">동네</span><p style="font-size:.58em; margin:0; color:#d6ece7;">반경 기반 매칭으로 <strong>가까운 수령</strong>을 보장</p></div>
+      <div class="card row center" style="gap:18px;"><span class="statn" style="font-size:1.1em;">반복</span><p style="font-size:.58em; margin:0; color:#d6ece7;">생필품은 <strong>주기적 재구매</strong> — 공구 수요가 마르지 않음</p></div>
+      <div class="card row center" style="gap:18px;"><span class="statn" style="font-size:1.1em;">신뢰</span><p style="font-size:.58em; margin:0; color:#d6ece7;"><strong>에스크로 + 등급</strong>으로 먹튀·허위를 구조적으로 차단</p></div>
+    </div>
+    <div class="phone l"><div class="scr"><img src="screens/02-explore.png" alt="탐색"/></div>
+      <div class="pcap">동네 공구 탐색 — 최소 인원·거리·마감이 한눈에</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4b · CONCEPT DERIVATION / RESEARCH ============ -->
+<section class="dark" data-background-color="#081715">
+  <span class="eyebrow" style="color:var(--warm)">02 · Concept Discovery</span>
+  <h2 style="color:#fff;">컨셉은 이렇게 도출됐다</h2>
+  <div class="head-rule"></div>
+  <div class="flow" style="margin:.1em 0 1.1em;">
+    <span class="node k">관찰 · 인터뷰</span><span class="arr">→</span>
+    <span class="node k">페인포인트 정의</span><span class="arr">→</span>
+    <span class="node k">컨셉 가설</span><span class="arr">→</span>
+    <span class="node k">프로토타입 검증</span><span class="arr">→</span>
+    <span class="node alt">14차 이터레이션</span>
+  </div>
+  <div class="grid g3">
+    <div class="card">
+      <div class="eyebrow" style="color:var(--brand-l); margin-bottom:.4em;">발견 · Research</div>
+      <ul class="list-clean">
+        <li style="color:#d6ece7;">카톡 공구의 <b style="color:#fff">먹튀·환불 불안</b>이 1순위 이탈 사유</li>
+        <li style="color:#d6ece7;">생필품은 <b style="color:#fff">주기적 재구매</b> — 반복 수요 존재</li>
+        <li style="color:#d6ece7;">"<b style="color:#fff">총대 멜 사람</b>"이 없어 공구가 안 열림</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="color:var(--brand-l); margin-bottom:.4em;">해석 · Insight</div>
+      <ul class="list-clean">
+        <li style="color:#d6ece7;">문제는 가격이 아니라 <b style="color:#fff">신뢰</b>다</li>
+        <li style="color:#d6ece7;">수요(참여자)보다 <b style="color:#fff">공급(팀장)</b>이 병목</li>
+        <li style="color:#d6ece7;">신뢰는 의지가 아닌 <b style="color:#fff">구조</b>로 풀어야</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:var(--warm);">
+      <div class="eyebrow" style="color:var(--warm); margin-bottom:.4em;">전환 · Concept</div>
+      <ul class="list-clean">
+        <li style="color:#d6ece7;">에스크로 <b style="color:#fff">공구페이</b> → 먹튀 차단</li>
+        <li style="color:#d6ece7;">고정가 <b style="color:#fff">카탈로그</b> → 허위·흥정 제거</li>
+        <li style="color:#d6ece7;"><b style="color:#fff">등급제 보상</b> → 팀장 공급 유도</li>
+      </ul>
+    </div>
+  </div>
+  <p class="mut" style="font-size:.48em; margin-top:14px; color:#7fa8a0;">강의에서 다룬 리서치 → 페인포인트 → 컨셉 → 프로토타입 검증 흐름을 그대로 적용 · 교수자/추가 요구 11건을 이터레이션으로 반영</p>
+</section>
+
+<!-- ============ 5 · CONCEPT ============ -->
+<section>
+  <span class="eyebrow">02 · Concept</span>
+  <div class="row between center full">
+    <div class="col" style="max-width:54%;">
+      <p class="big-quote" style="color:var(--ink); margin-top:.1em;">
+        플랫폼이 <span class="under">품목과 가격을 미리 제공</span>하고,<br/>
+        이웃 팀장이 <span class="under">동네에서 모아 함께 수령</span>한다.
+      </p>
+      <ul class="list-clean" style="margin-top:1.1em;">
+        <li><b style="color:var(--brand-d)">고정가 카탈로그</b> — 이미 10·20인 단가로 협상된 가격, 고르기만 하면 끝</li>
+        <li><b style="color:var(--brand-d)">공구페이 에스크로</b> — 모집 성공 전까지 결제금 보관, 실패 시 자동 환불</li>
+        <li><b style="color:var(--brand-d)">범위 매칭</b> — 참여·노출 반경을 직접 설정, 멀리 끼는 참여 차단</li>
+        <li><b style="color:var(--brand-d)">팀장 등급제</b> — 열수록 수수료 ↑, 공급을 끌어내는 동기 설계</li>
+      </ul>
+    </div>
+    <div class="phone-set">
+      <div class="phone s"><div class="scr"><img src="screens/04-open.png" alt="공구열기"/></div><div class="pcap">고정가 카탈로그 선택</div></div>
+      <div class="phone m"><div class="scr"><img src="screens/05-payment.png" alt="결제"/></div><div class="pcap">공구페이 에스크로 결제</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · FEATURES & RATIONALE ============ -->
+<section>
+  <span class="eyebrow">03 · Features × Why</span>
+  <h2>모든 기능엔 이유가 있다</h2>
+  <div class="head-rule"></div>
+  <div class="grid g4" style="margin-top:.3em;">
+    <div class="feat"><div class="ico">🛡️</div><h3>공구페이</h3><p>모집 성공까지 결제금 에스크로 보관</p><div class="why">→ 먹튀 방지</div></div>
+    <div class="feat"><div class="ico">🗺️</div><h3>실제 지도</h3><p>OSM 기반 수령 위치·반경 시각화</p><div class="why">→ 원거리 참여 차단</div></div>
+    <div class="feat"><div class="ico">🧺</div><h3>고정가 카탈로그</h3><p>플랫폼이 품목·가격 제공, 임의 등록 불가</p><div class="why">→ 허위·과장 차단</div></div>
+    <div class="feat"><div class="ico">⭐</div><h3>팀장 등급제</h3><p>개설 마일리지로 수수료 비중 상승</p><div class="why">→ 공급 동기 부여</div></div>
+    <div class="feat"><div class="ico">📍</div><h3>범위 설정</h3><p>참여·노출 반경을 마이페이지에서 조절</p><div class="why">→ 콜드스타트 완화</div></div>
+    <div class="feat"><div class="ico">🎁</div><h3>지인 초대 이벤트</h3><p>초대 성사 시 양쪽 모두 혜택 지급</p><div class="why">→ 바이럴 성장</div></div>
+    <div class="feat"><div class="ico">👥</div><h3>10–50명 모집</h3><p>최소 인원 미달 시 미성사·자동 환불</p><div class="why">→ 단가·실행 보장</div></div>
+    <div class="feat"><div class="ico">💬</div><h3>공구 채팅·수령</h3><p>모집부터 수령·후기까지 한 흐름</p><div class="why">→ 완결된 거래</div></div>
+  </div>
+</section>
+
+<!-- ============ 7 · TIER SYSTEM ============ -->
+<section class="dark" data-background-color="#0d2723">
+  <span class="eyebrow" style="color:var(--warm)">04 · Growth Engine</span>
+  <h2 style="color:#fff;">팀장 등급제 — 열수록 더 가져간다</h2>
+  <div class="head-rule"></div>
+  <div class="row between" style="gap:30px; align-items:center;">
+    <div style="width:62%;">
+      <div class="tier-rail">
+        <div class="tierc tier-bronze"><div class="nm">브론즈</div><div class="pct">50%</div><div class="lab">수수료 몫</div><div class="ml">마일리지 0+</div></div>
+        <div class="tierc tier-silver"><div class="nm">실버</div><div class="pct">65%</div><div class="lab">수수료 몫</div><div class="ml">500+</div></div>
+        <div class="tierc tier-gold tall"><div class="nm">골드</div><div class="pct">80%</div><div class="lab">수수료 몫</div><div class="ml">1,500+</div></div>
+        <div class="tierc tier-plat tall"><div class="nm">플래티넘 ✦</div><div class="pct">95%</div><div class="lab">수수료 몫</div><div class="ml">3,000+</div></div>
+      </div>
+      <div class="card" style="margin-top:16px; display:flex; gap:26px; align-items:center;">
+        <div><div class="statn" style="font-size:1.2em;">+250</div><div class="statl" style="color:#9fc4bd;">공구 1회 개설 마일리지</div></div>
+        <div style="width:1px;height:46px;background:rgba(255,255,255,.15)"></div>
+        <div><div class="statn" style="font-size:1.2em;">₩800</div><div class="statl" style="color:#9fc4bd;">건당 기준 수수료 (1인)</div></div>
+        <div style="width:1px;height:46px;background:rgba(255,255,255,.15)"></div>
+        <p style="font-size:.52em; color:#cdebe5; margin:0; max-width:11em;">플래티넘 달성 시 <strong style="color:#fff">760원</strong>이 팀장 몫. 거부감을 보상으로 바꾼다.</p>
+      </div>
+    </div>
+    <div class="phone l"><div class="scr"><img src="screens/07-tier.png" alt="등급"/></div>
+      <div class="pcap">등급·다음 등급까지 남은 마일리지 · 이름 반짝 효과</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7b · IA ============ -->
+<section>
+  <span class="eyebrow">04 · Information Architecture</span>
+  <h2>정보 구조도 — 8개 그룹, 38개 화면</h2>
+  <div class="head-rule"></div>
+  <div class="row between" style="gap:26px;">
+    <div class="grid g4" style="width:70%; gap:12px;">
+      <div class="card flat" style="padding:13px 15px; border-top:4px solid #6366f1;"><h3 style="font-size:.6em;">진입 · 인증 <span class="mut" style="font-weight:600;">3</span></h3><p class="mut" style="font-size:.43em; margin:.2em 0 0;">랜딩 · 로그인 · 가입</p></div>
+      <div class="card flat" style="padding:13px 15px; border-top:4px solid #2e9d79;"><h3 style="font-size:.6em;">메인 · 탐색 <span class="mut" style="font-weight:600;">5</span></h3><p class="mut" style="font-size:.43em; margin:.2em 0 0;">홈 · 탐색 · 상세 · 거리경고</p></div>
+      <div class="card flat" style="padding:13px 15px; border-top:4px solid #0ea5e9;"><h3 style="font-size:.6em;">공구 열기 <span class="chip b" style="padding:.1em .4em;">팀장</span> <span class="mut" style="font-weight:600;">3</span></h3><p class="mut" style="font-size:.43em; margin:.2em 0 0;">품목·위치 → 일정 → 결제</p></div>
+      <div class="card flat" style="padding:13px 15px; border-top:4px solid #8b5cf6;"><h3 style="font-size:.6em;">결제 · 모집 <span class="mut" style="font-weight:600;">6</span></h3><p class="mut" style="font-size:.43em; margin:.2em 0 0;">공구페이 · 모집 성공/실패</p></div>
+      <div class="card flat" style="padding:13px 15px; border-top:4px solid #ec4899;"><h3 style="font-size:.6em;">채팅 · 수령 · 후기 <span class="mut" style="font-weight:600;">6</span></h3><p class="mut" style="font-size:.43em; margin:.2em 0 0;">채팅 · 수령확인 · 후기</p></div>
+      <div class="card flat" style="padding:13px 15px; border-top:4px solid #ef4444;"><h3 style="font-size:.6em;">예외 · 환불 · 분쟁 <span class="mut" style="font-weight:600;">6</span></h3><p class="mut" style="font-size:.43em; margin:.2em 0 0;">환불 · 취소 · 연락두절 · 분쟁</p></div>
+      <div class="card flat" style="padding:13px 15px; border-top:4px solid #f59e0b;"><h3 style="font-size:.6em;">마이페이지 <span class="mut" style="font-weight:600;">7</span></h3><p class="mut" style="font-size:.43em; margin:.2em 0 0;">등급 · 범위 · 포인트 · 주소</p></div>
+      <div class="card flat" style="padding:13px 15px; border-top:4px solid #f97316;"><h3 style="font-size:.6em;">이벤트 · 초대 <span class="mut" style="font-weight:600;">2</span></h3><p class="mut" style="font-size:.43em; margin:.2em 0 0;">팀장 초대 · 지인 혜택</p></div>
+    </div>
+    <div class="col" style="width:30%; gap:12px;">
+      <div class="card" style="background:linear-gradient(150deg,var(--brand),var(--brand-d)); border:none; color:#fff;">
+        <h3 style="color:#fff; font-size:.62em; margin-bottom:.5em;">전역 하단 탭</h3>
+        <div class="flow" style="gap:5px;">
+          <span class="node k" style="font-size:.46em; background:rgba(255,255,255,.18); border:none;">홈</span>
+          <span class="node k" style="font-size:.46em; background:rgba(255,255,255,.18); border:none;">탐색</span>
+          <span class="node k" style="font-size:.46em; background:#fff; color:var(--brand-d); border:none;">＋ 열기</span>
+          <span class="node k" style="font-size:.46em; background:rgba(255,255,255,.18); border:none;">채팅</span>
+          <span class="node k" style="font-size:.46em; background:rgba(255,255,255,.18); border:none;">마이</span>
+        </div>
+      </div>
+      <div class="card flat" style="background:#eef7f4; border:none;">
+        <p style="font-size:.5em; color:var(--ink-soft); margin:0;">로그인 없이도 탐색까지 가능 · <b style="color:var(--brand-d)">결제·개설부터 인증</b> 필요 — 진입 장벽을 뒤로 미룸</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · FLOW PARTICIPANT ============ -->
+<section>
+  <span class="eyebrow">05 · User Flow — 참여자</span>
+  <h2>발견에서 수령까지, 끊김 없이</h2>
+  <div class="head-rule"></div>
+  <div class="flow" style="margin:.2em 0 1em;">
+    <span class="node k">홈</span><span class="arr">→</span>
+    <span class="node">탐색</span><span class="arr">→</span>
+    <span class="node">상세·지도</span><span class="arr">→</span>
+    <span class="node">공구페이 결제</span><span class="arr">→</span>
+    <span class="node">모집·채팅</span><span class="arr">→</span>
+    <span class="node">수령·후기</span>
+    <span class="arr" style="margin-left:10px">↘</span><span class="node alt">실패 시 자동 환불</span>
+  </div>
+  <div class="phone-set" style="justify-content:space-between; gap:12px;">
+    <div class="phone s"><div class="scr"><img src="screens/01-home.png" alt=""/></div><div class="pcap">① 홈 · 초대 배너</div></div>
+    <div class="phone s"><div class="scr"><img src="screens/02-explore.png" alt=""/></div><div class="pcap">② 탐색 · 최소 인원</div></div>
+    <div class="phone s"><div class="scr"><img src="screens/03-detail.png" alt=""/></div><div class="pcap">③ 상세 · 수령 지도</div></div>
+    <div class="phone s"><div class="scr"><img src="screens/05-payment.png" alt=""/></div><div class="pcap">④ 공구페이 결제</div></div>
+  </div>
+</section>
+
+<!-- ============ 9 · FLOW LEADER ============ -->
+<section>
+  <span class="eyebrow">05 · User Flow — 팀장</span>
+  <h2>가격 입력 없는, 3분 개설</h2>
+  <div class="head-rule"></div>
+  <div class="flow" style="margin:.2em 0 1em;">
+    <span class="node k">공구 열기</span><span class="arr">→</span>
+    <span class="node">카탈로그 선택</span><span class="arr">→</span>
+    <span class="node">위치·반경</span><span class="arr">→</span>
+    <span class="node">인원·일정</span><span class="arr">→</span>
+    <span class="node">개설</span><span class="arr">→</span>
+    <span class="node alt">지인 초대</span>
+  </div>
+  <div class="row between center">
+    <div class="phone-set">
+      <div class="phone m"><div class="scr"><img src="screens/04-open.png" alt=""/></div><div class="pcap">품목·위치·OSM 지도</div></div>
+      <div class="phone m"><div class="scr"><img src="screens/08-invite.png" alt=""/></div><div class="pcap">지인 초대 이벤트</div></div>
+    </div>
+    <div class="card" style="width:38%;">
+      <h3 style="font-size:.74em;">왜 가격 입력을 없앴나</h3>
+      <p class="mut" style="font-size:.56em;">우리 카탈로그는 이미 10·20인 공구 단가로 제공된다. 팀장은 <strong>품목만</strong> 고르면 된다 — 흥정도, 정산 계산도 없다.</p>
+      <div class="row" style="gap:8px; margin-top:.8em; flex-wrap:wrap;">
+        <span class="chip b">10–50명</span><span class="chip b">최소 인원 카드 표시</span><span class="chip w">개설 +250 마일리지</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 · SCREEN GALLERY ============ -->
+<section class="dark" data-background-color="#0d2723">
+  <span class="eyebrow" style="color:var(--warm)">05 · Prototype</span>
+  <h2 style="color:#fff;">와이어프레임 → 동작형 프로토타입</h2>
+  <div class="head-rule"></div>
+  <div class="phone-set" style="justify-content:space-between; gap:10px;">
+    <div class="phone xs"><div class="scr"><img src="screens/09-landing.png" alt=""/></div><div class="pcap">랜딩 · USP</div></div>
+    <div class="phone xs"><div class="scr"><img src="screens/02-explore.png" alt=""/></div><div class="pcap">탐색 · 실사 카드</div></div>
+    <div class="phone xs"><div class="scr"><img src="screens/03-detail.png" alt=""/></div><div class="pcap">상세 · 지도</div></div>
+    <div class="phone xs"><div class="scr"><img src="screens/06-mypage.png" alt=""/></div><div class="pcap">마이 · 등급 반짝</div></div>
+    <div class="phone xs"><div class="scr"><img src="screens/11-neighborhood.png" alt=""/></div><div class="pcap">동네 범위</div></div>
+    <div class="phone xs"><div class="scr"><img src="screens/10-failure.png" alt=""/></div><div class="pcap">모집 실패 → 환불</div></div>
+  </div>
+  <p style="font-size:.56em; color:#9fc4bd; margin-top:1.2em; text-align:center;">
+    React 프로토타입 · 화면 보드 <span class="link">/screens</span> · 라이브 데모 <span class="link">uxui-ecru.vercel.app</span>
+  </p>
+</section>
+
+<!-- ============ 11 · EDGE CASES ============ -->
+<section>
+  <span class="eyebrow">06 · Edge Cases</span>
+  <h2>잘 풀릴 때가 아니라, 틀어질 때를 설계했다</h2>
+  <div class="head-rule"></div>
+  <div class="row between center">
+    <table class="tbl" style="width:58%;">
+      <tr><th>리스크</th><th>대응 화면 · 정책</th></tr>
+      <tr><td><b>모집 실패</b></td><td>최소 인원 미달 → 미성사 안내 + <strong>전액 자동 환불</strong></td></tr>
+      <tr><td><b>팀장 연락두절</b></td><td>신고·이의제기 플로우 → 환불·분쟁 처리</td></tr>
+      <tr><td><b>수령 기한 초과</b></td><td>보관 이슈·기한 초과 전용 화면 안내</td></tr>
+      <tr><td><b>참여 취소</b></td><td>모집 중/모집 후 단계별 취소·환불 분기</td></tr>
+      <tr><td><b>콜드스타트</b></td><td>범위 확장 설정 + 동네 배너로 초기 밀도 보완</td></tr>
+    </table>
+    <div class="phone l"><div class="scr"><img src="screens/10-failure.png" alt="모집 실패"/></div>
+      <div class="pcap">모집 실패 → 자동 환불 안내 화면</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12 · METRICS / TECH ============ -->
+<section class="dark" data-background-color="#081715">
+  <div class="glow" style="width:360px;height:360px;background:#2a9d8f;top:-80px;right:-60px;opacity:.4;"></div>
+  <span class="eyebrow" style="color:var(--warm)">06 · Build</span>
+  <h2 style="color:#fff;">손에 잡히는 결과물</h2>
+  <div class="head-rule"></div>
+  <div class="grid g4" style="margin:.2em 0 1.1em;">
+    <div class="card"><div class="statn">36</div><div class="statl" style="color:#9fc4bd;">화면 페이지</div></div>
+    <div class="card"><div class="statn">38</div><div class="statl" style="color:#9fc4bd;">등록 화면 라우트</div></div>
+    <div class="card"><div class="statn">14×</div><div class="statl" style="color:#9fc4bd;">설계 이터레이션</div></div>
+    <div class="card"><div class="statn">4</div><div class="statl" style="color:#9fc4bd;">팀장 등급 단계</div></div>
+  </div>
+  <div class="row" style="gap:16px;">
+    <div class="card grow"><h3 style="color:#fff;font-size:.7em;">기술 스택</h3>
+      <div class="row" style="gap:7px; flex-wrap:wrap; margin-top:.5em;">
+        <span class="chip b">React 19</span><span class="chip b">TypeScript</span><span class="chip b">Vite 6</span>
+        <span class="chip b">Tailwind 4</span><span class="chip b">React Router 7</span><span class="chip w">Vercel 배포</span>
+      </div></div>
+    <div class="card grow"><h3 style="color:#fff;font-size:.7em;">디자인 디테일</h3>
+      <div class="row" style="gap:7px; flex-wrap:wrap; margin-top:.5em;">
+        <span class="chip b">Lightroom 톤 UI</span><span class="chip b">실사 WebP 상품</span><span class="chip b">OSM 실제 지도</span>
+        <span class="chip w">등급별 반짝 이름</span><span class="chip w">최소 인원 강조</span>
+      </div></div>
+  </div>
+</section>
+
+<!-- ============ 13 · CLOSING ============ -->
+<section class="dark" data-background-color="#081715">
+  <div class="glow" style="width:460px;height:460px;background:#2a9d8f;bottom:-140px;left:-60px;opacity:.45;"></div>
+  <div class="glow" style="width:300px;height:300px;background:#f4a261;top:-60px;right:60px;opacity:.3;"></div>
+  <div class="row between center full">
+    <div class="col" style="max-width:50%;">
+      <span class="kicker">Thank you</span>
+      <h1 style="font-size:2em; margin:.3em 0 .25em; color:#fff;">동네에서 같이 사면,<br/><span style="color:var(--brand-l)">같이 싸게.</span></h1>
+      <p style="font-size:.66em; color:#bfe0d9; max-width:18em;">신뢰를 구조로 풀고, 보상으로 공급을 만든 하이퍼로컬 공동구매. <strong>Q &amp; A</strong>를 환영합니다.</p>
+      <p style="font-size:.58em; color:#7fa8a0; margin-top:1.6em;">라이브 데모 · <span class="link">https://uxui-ecru.vercel.app</span></p>
+    </div>
+    <div class="phone-set" style="gap:16px;">
+      <div class="phone s"><div class="scr"><img src="screens/02-explore.png" alt=""/></div></div>
+      <div class="phone m"><div class="scr"><img src="screens/01-home.png" alt=""/></div></div>
+      <div class="phone s"><div class="scr"><img src="screens/07-tier.png" alt=""/></div></div>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+<div class="brandmark">우리동네 공구</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+Reveal.initialize({
+  hash:true, slideNumber:'c/t', transition:'slide', transitionSpeed:'default',
+  width:1280, height:720, margin:0, controlsTutorial:false, controls:true,
+  backgroundTransition:'fade',
+});
+</script>
+</body>
+</html>

@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useCallback, type ReactNode } from
 import type { NotificationFrequency, NeighborhoodRange } from '../data/notifications'
 import type { GeoPoint } from '../data/locations'
 import { leaderLocationPresets } from '../data/locations'
+import { getRandomDemoMileage } from '../data/leaderTier'
 
 interface User {
   name: string
@@ -105,10 +106,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [inviteRewardClaimed, setInviteRewardClaimed] = useState(
     () => sessionStorage.getItem('gonggu_invite_claimed') !== null,
   )
-  const [leaderMileage, setLeaderMileage] = useState(() => {
-    const v = localStorage.getItem('gonggu_leader_mileage')
-    return v ? parseInt(v, 10) || 0 : 750
-  })
+  const [leaderMileage, setLeaderMileage] = useState(getRandomDemoMileage)
 
   const setParticipationRange = useCallback((r: NeighborhoodRange) => {
     setParticipationRangeState(r)
@@ -137,11 +135,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const addLeaderMileage = useCallback((amount: number) => {
-    setLeaderMileage((m) => {
-      const next = m + amount
-      localStorage.setItem('gonggu_leader_mileage', String(next))
-      return next
-    })
+    setLeaderMileage((m) => m + amount)
   }, [])
 
   const claimInviteReward = useCallback(

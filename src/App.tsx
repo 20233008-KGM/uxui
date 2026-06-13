@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { MobileFrame } from './components/BottomNav'
 import { RequireAuth, RequireGuest } from './components/RequireAuth'
 import LandingPage from './pages/LandingPage'
@@ -38,6 +39,15 @@ import LeaderTierPage from './pages/LeaderTierPage'
 import PickupOverduePage from './pages/PickupOverduePage'
 import StorageIssuePage from './pages/StorageIssuePage'
 
+/** 라우트가 바뀔 때마다 스크롤을 상단으로 되돌린다 (SPA 기본 동작 보정) */
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 function AuthFrame({ children, showNav = true }: { children: React.ReactNode; showNav?: boolean }) {
   return (
     <RequireAuth>
@@ -48,6 +58,8 @@ function AuthFrame({ children, showNav = true }: { children: React.ReactNode; sh
 
 export default function App() {
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       <Route path="/landing" element={<RequireGuest><LandingPage /></RequireGuest>} />
       <Route path="/login" element={<RequireGuest><LoginPage /></RequireGuest>} />
@@ -91,5 +103,6 @@ export default function App() {
 
       <Route path="*" element={<Navigate to="/landing" replace />} />
     </Routes>
+    </>
   )
 }
