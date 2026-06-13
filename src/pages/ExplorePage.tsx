@@ -122,7 +122,7 @@ export default function ExplorePage() {
           )}
         </div>
       ) : (
-        <div className="px-5 flex flex-col gap-3 pb-4">
+        <div className="px-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 pb-4">
           {filtered.map((item) => (
             <GroupBuyCardCompact key={item.id} item={item} />
           ))}

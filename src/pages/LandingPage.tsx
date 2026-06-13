@@ -3,7 +3,7 @@ import { ShieldCheck, Users, Bell, TrendingDown } from 'lucide-react'
 
 export default function LandingPage() {
   return (
-    <div className="min-h-dvh bg-bg flex flex-col">
+    <div className="min-h-dvh bg-bg flex flex-col w-full max-w-[440px] mx-auto">
       <div className="flex-1 flex flex-col items-center justify-center px-8 py-12">
         <div className="w-20 h-20 rounded-3xl bg-primary flex items-center justify-center mb-6 shadow-lg shadow-primary/30">
           <Users size={40} className="text-white" />

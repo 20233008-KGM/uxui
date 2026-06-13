@@ -16,7 +16,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-bg flex flex-col px-6 py-8">
+    <div className="min-h-dvh bg-bg flex flex-col px-6 py-8 w-full max-w-[440px] mx-auto">
       <button onClick={() => navigate('/landing')} className="mb-6" aria-label="뒤로">
         <ArrowLeft size={22} />
       </button>

@@ -48,10 +48,20 @@ function ScrollToTop() {
   return null
 }
 
-function AuthFrame({ children, showNav = true }: { children: React.ReactNode; showNav?: boolean }) {
+function AuthFrame({
+  children,
+  showNav = true,
+  wide = false,
+}: {
+  children: React.ReactNode
+  showNav?: boolean
+  wide?: boolean
+}) {
   return (
     <RequireAuth>
-      <MobileFrame showNav={showNav}>{children}</MobileFrame>
+      <MobileFrame showNav={showNav} wide={wide}>
+        {children}
+      </MobileFrame>
     </RequireAuth>
   )
 }
@@ -68,7 +78,7 @@ export default function App() {
       <Route path="/" element={<AuthFrame><HomePage /></AuthFrame>} />
       <Route path="/explore" element={<AuthFrame><ExplorePage /></AuthFrame>} />
       <Route path="/explore/slide" element={<AuthFrame><ExploreSlidePage /></AuthFrame>} />
-      <Route path="/detail/:id" element={<AuthFrame showNav={false}><DetailPage /></AuthFrame>} />
+      <Route path="/detail/:id" element={<AuthFrame showNav={false} wide><DetailPage /></AuthFrame>} />
       <Route path="/payment/:id" element={<AuthFrame showNav={false}><PaymentPage /></AuthFrame>} />
       <Route path="/payment/:id/complete" element={<AuthFrame showNav={false}><PaymentCompletePage /></AuthFrame>} />
       <Route path="/recruitment/:result" element={<AuthFrame showNav={false}><RecruitmentResultPage /></AuthFrame>} />
